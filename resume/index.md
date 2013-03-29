@@ -20,15 +20,13 @@ description: ""
 
 ## Professional Experience
 
-<section>
-<hgroup>
-
-# Senior Ruby Developer
-## Telcare
-## Bethesda, MD
-## November 2011- present
-
-</hgroup>
+<section markdown='1'>
+  <hgroup>
+    <h1>Senior Ruby Developer</h1>
+    <h2 class='organization'>Telcare</h2>
+    <h2 class='location'>Bethesda, MD</h2>
+    <h2 class='time'>November 2011 - present</h2>
+  </hgroup>
 
 - Maintained and did day-to-day feature development for Rails-based blood glucose tracking application, with a strong focus on testing and security. 
 - Integrated Rails frontend with the Java-based API used by a related iOS app. 
@@ -37,13 +35,13 @@ description: ""
 - Go-to developer for Ruby-specific questions.
 </section>
 
-<section>
-<hgroup>
-# Senior Web Developer
-## KaBOOM!
-## Washington, DC
-## December 2009 - October 2011
-</hgroup>
+<section markdown='1'>
+  <hgroup>
+    <h1>Senior Web Developer</h1>
+    <h2 class='organization'>KaBOOM!</h2>
+    <h2 class='location'>Washington, DC</h2>
+    <h2 class='time'>December 2009 - October 2011</h2>
+  </hgroup>
 
 - Overhauled flagship Rails application, the DIY Project Planner - was heavily involved in a complete UI redesign, and solely responsible for the ensuing near-ground-up rewrite and necessary data migrations.
 - Maintained four Rails applications, including systems administration duties. 
@@ -54,13 +52,13 @@ description: ""
 
 </section>
 
-<section>
-<hgroup>
-# Junior Engineer/Event Producer
-## Intellor Group
-## Gaithersburg, MD
-## September 2008- June 2009
-</hgroup>
+<section markdown='1'>
+  <hgroup>
+    <h1>Junior Engineer/Event Producer</h1>
+    <h2 class='organization'>Intellor Group</h2>
+    <h2 class='location'>Gaithersburg, MD</h2>
+    <h2 class='time'>September 2008 - June 2009</h2>
+  </hgroup>
 
 - Completely overhauled look and feel of Interchange-based e-commerce module, including hard-coded admin interface elements. Original templates were written in an unholy mix of Perl, HTML, and a Perl-based custom tag language.
 - Designed web pages and related graphics, adhering strictly to client style guides. 
@@ -69,17 +67,17 @@ description: ""
 
 </section>
 
-<section>
-<hgroup>
-# Freelance Theater Technician
-## Various Theaters
-## Washington, DC
-## January 2006 – July 2008
-</hgroup>
+<section markdown='1'>
+  <hgroup>
+    <h1>Freelance Theater Technician</h1>
+    <h2 class='organization'>Various Theaters</h2>
+    <h2 class='location'>Washington, DC</h2>
+    <h2 class='time'>January 2006 – July 2008</h2>
+  </hgroup>
 
-- As *Set Designer*, duties included graphic design.
-- As *Scenic Artist*, duties included project management and implementing loosely defined design concepts.
-- As *Assistant Stage Manager*, supervised 40+-person teams and coordinated events.
+- As **Set Designer**, duties included graphic design.
+- As **Scenic Artist**, duties included project management and implementing loosely defined design concepts.
+- As **Assistant Stage Manager**, supervised 40+-person teams and coordinated events.
 
 </section>
 
@@ -89,4 +87,4 @@ description: ""
 - Montgomery College, technical theater major (54 credits completed) 
 - Montgomery Blair High School Math/Science/Computer Science Magnet program, grad. 2004
 
-## *References* available upon request.
+## **References** available upon request.
