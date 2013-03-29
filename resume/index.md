@@ -22,11 +22,14 @@ description: ""
 
 <section>
 <hgroup>
+
 # Senior Ruby Developer
 ## Telcare
 ## Bethesda, MD
 ## November 2011- present
+
 </hgroup>
+
 - Maintained and did day-to-day feature development for Rails-based blood glucose tracking application, with a strong focus on testing and security. 
 - Integrated Rails frontend with the Java-based API used by a related iOS app. 
 - Wrote reasonably complete Cucumber test suite from near-scratch; in the process, dealt with the pitfalls inherent in complex test fixtures, cleaning of multiple databases, mocking of an extensive HTTPS API, and XPath table traversal. 
@@ -42,7 +45,7 @@ description: ""
 ## December 2009 - October 2011
 </hgroup>
 
-- Overhauled flagship Rails application, the DIY Project Planner - was heavily involved in a complete UI redesign & solely responsible for the ensuing near-ground-up rewrite & necessary data migrations.
+- Overhauled flagship Rails application, the DIY Project Planner - was heavily involved in a complete UI redesign, and solely responsible for the ensuing near-ground-up rewrite and necessary data migrations.
 - Maintained four Rails applications, including systems administration duties. 
 - Integrated with external systems with varying levels of API coverage. 
 - Did some UI design work; shepherded others' work from "concept" to "spec." 
@@ -75,7 +78,7 @@ description: ""
 </hgroup>
 
 - As *Set Designer*, duties included graphic design.
-- As *Scenic Artist*, duties included project management & implementing loosely defined design concepts.
+- As *Scenic Artist*, duties included project management and implementing loosely defined design concepts.
 - As *Assistant Stage Manager*, supervised 40+-person teams and coordinated events.
 
 </section>
