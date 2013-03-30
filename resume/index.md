@@ -20,7 +20,7 @@ description: ""
 
 ## Professional Experience
 
-<section markdown='1'>
+<section>
   <hgroup>
     <h1>Senior Ruby Developer</h1>
     <h2 class='organization'>Telcare</h2>
@@ -28,14 +28,16 @@ description: ""
     <h2 class='time'>November 2011 - present</h2>
   </hgroup>
 
-- Maintained and did day-to-day feature development for Rails-based blood glucose tracking application, with a strong focus on testing and security. 
-- Integrated Rails frontend with the Java-based API used by a related iOS app. 
-- Wrote reasonably complete Cucumber test suite from near-scratch; in the process, dealt with the pitfalls inherent in complex test fixtures, cleaning of multiple databases, mocking of an extensive HTTPS API, and XPath table traversal. 
-- Led Rails 3 upgrade. 
-- Go-to developer for Ruby-specific questions.
+  <ul>
+    <li>Maintained and did day-to-day feature development for Rails-based blood glucose tracking application, with a strong focus on testing and security.</li>
+    <li>Integrated Rails frontend with the Java-based API used by a related iOS app.</li>
+    <li>Wrote reasonably complete Cucumber test suite from near-scratch; in the process, dealt with the pitfalls inherent in complex test fixtures, cleaning of multiple databases, mocking of an extensive HTTPS API, and XPath table traversal.</li>
+    <li>Led Rails 3 upgrade.</li>
+    <li>Go-to developer for Ruby-specific questions.</li>
+  </ul>
 </section>
 
-<section markdown='1'>
+<section>
   <hgroup>
     <h1>Senior Web Developer</h1>
     <h2 class='organization'>KaBOOM!</h2>
@@ -43,16 +45,17 @@ description: ""
     <h2 class='time'>December 2009 - October 2011</h2>
   </hgroup>
 
-- Overhauled flagship Rails application, the DIY Project Planner - was heavily involved in a complete UI redesign, and solely responsible for the ensuing near-ground-up rewrite and necessary data migrations.
-- Maintained four Rails applications, including systems administration duties. 
-- Integrated with external systems with varying levels of API coverage. 
-- Did some UI design work; shepherded others' work from "concept" to "spec." 
-- Mentored junior front-end developer/Drupal developer 
-- Rebuilt server environment and reconstructed corrupted MySQL data following a severe hacking incident.
-
+  <ul>
+    <li>Overhauled flagship Rails application, the DIY Project Planner - was heavily involved in a complete UI redesign, and solely responsible for the ensuing near-ground-up rewrite and necessary data migrations.</li>
+    <li>Maintained four Rails applications, including systems administration duties.</li>
+    <li>Integrated with external systems with varying levels of API coverage.</li>
+    <li>Did some UI design work; shepherded others' work from "concept" to "specification."</li>
+    <li>Mentored junior front-end developer/Drupal developer</li>
+    <li>Rebuilt server environment and reconstructed corrupted MySQL data following a severe hacking incident.</li>
+  </ul>
 </section>
 
-<section markdown='1'>
+<section>
   <hgroup>
     <h1>Junior Engineer/Event Producer</h1>
     <h2 class='organization'>Intellor Group</h2>
@@ -60,14 +63,15 @@ description: ""
     <h2 class='time'>September 2008 - June 2009</h2>
   </hgroup>
 
-- Completely overhauled look and feel of Interchange-based e-commerce module, including hard-coded admin interface elements. Original templates were written in an unholy mix of Perl, HTML, and a Perl-based custom tag language.
-- Designed web pages and related graphics, adhering strictly to client style guides. 
-- Wrote documentation and other technical support materials. 
-- Assisted lead developer in maintenance and testing of large Perl application
-
+  <ul>
+    <li>Completely overhauled look and feel of Interchange-based e-commerce module, including hard-coded admin interface elements.(Original templates were written in an unholy mix of Perl, HTML, and a Perl-based custom tag language.)</li>
+    <li>Designed web pages and related graphics, adhering strictly to client style guides.</li> 
+    <li>Wrote documentation and other technical support materials.</li>
+    <li>Assisted lead developer in maintenance and testing of large Perl application.</li>
+  </ul>
 </section>
 
-<section markdown='1'>
+<section>
   <hgroup>
     <h1>Freelance Theater Technician</h1>
     <h2 class='organization'>Various Theaters</h2>
@@ -75,10 +79,11 @@ description: ""
     <h2 class='time'>January 2006 – July 2008</h2>
   </hgroup>
 
-- As **Set Designer**, duties included graphic design.
-- As **Scenic Artist**, duties included project management and implementing loosely defined design concepts.
-- As **Assistant Stage Manager**, supervised 40+-person teams and coordinated events.
-
+  <ul>
+    <li>As **Set Designer**, duties included graphic design.</li>
+    <li>As **Scenic Artist**, duties included project management and implementing loosely defined design concepts.</li>
+    <li>As **Assistant Stage Manager**, supervised 40+-person teams and coordinated events.</li>
+  </ul>
 </section>
 
 ## Education:
@@ -87,4 +92,4 @@ description: ""
 - Montgomery College, technical theater major (54 credits completed) 
 - Montgomery Blair High School Math/Science/Computer Science Magnet program, grad. 2004
 
-## **References** available upon request.
+## **References** available upon [request](mailto:betsy.haibel@gmail.com).
