@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------*/
 /* Layout */
-/* line 9, ../sass/screen.scss */
+/* line 9, ../scss/screen.scss */
 .container {
   *zoom: 1;
   max-width: 59em;
@@ -24,7 +24,7 @@
   -moz-background-clip: content-box;
   background-clip: content-box;
 }
-/* line 38, ../../../../.rvm/gems/ruby-1.9.3-p392@jekyll/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../../../.rvm/gems/ruby-1.9.3-p392@jekyll/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .container:after {
   content: "";
   display: table;
