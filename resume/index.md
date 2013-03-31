@@ -1,13 +1,18 @@
 ---
 layout: page
-title: "Resume"
+title: "Betsy Haibel"
 description: ""
 ---
 {% include JB/setup %}
 
-# Elizabeth Haibel
+is a full-stack web developer
 
-## Summary of Qualifications
+is passionate about:
+- test-driven development
+- dynamic, yet semantic, web applications
+- looking past MVC to slim down fat models
+
+## Skills
 
 - Enjoys working full-stack, from CSS to Javascript to back-end work. 
 - Extremely comfortable in Ruby; also familiar with Perl, PHP, Objective-C/iOS. Some Python and Java.

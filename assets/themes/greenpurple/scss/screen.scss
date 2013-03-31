@@ -2,11 +2,79 @@
 // Imports
 
 @import "base";
+@import "compass/css3/box-shadow";
 
 /* -------------------------------------------------------------------------*/
 /* Layout */
 
 .container {
   @include container;
-  @include susy-grid-background;
+  //@include susy-grid-background;
+}
+
+nav {
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  li {
+    @include span-columns(3, 12);
+    text-align: center;
+  }
+  li:last-of-type {
+    @include span-columns(3 omega, 12);
+  }
+}
+
+section {
+  h2 {
+    display: inline-block;
+  }
+}
+
+/* -------------------------------------------------------------------------*/
+/* Fonts */
+
+body {
+  font-family: 'Alegreya', serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: normal;
+}
+
+h1 {
+  text-align: center;
+  font-size: 4em;
+}
+
+section {
+  h1 {
+    font-size: 2em;
+    text-align: left;
+  }
+  h2 {
+    font-size: 1.25em;
+  }
+}
+
+/* -------------------------------------------------------------------------*/
+/* Colors */
+
+a, a:link {
+  color: $purple;
+  text-decoration: none;
+}
+
+/* -------------------------------------------------------------------------*/
+/* froufrouraw */
+
+section {
+  @include single-box-shadow($color: $light-blue, $spread: .5em, $blur: 2em, $inset: true);
+  border: 1px dashed $dark-blue;
+}
+
+section h1 {
+  border-bottom: 2px dashed $dark-blue;
 }
