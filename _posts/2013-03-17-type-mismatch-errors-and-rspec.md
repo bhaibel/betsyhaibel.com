@@ -11,6 +11,7 @@ Some notes, for the public benefit, on some RSpec troubleshooting I've been doin
 
 My integration tests for [Rated R for Rapist](http://github.com/irregulargentlewomen/ratedrforrapist) had been consistently failing, every last one, even the most basic:
 
+{% highlight ruby %}
     require_relative '../spec_helper_integration'
     
     describe "serving the root page" do
@@ -22,6 +23,7 @@ My integration tests for [Rated R for Rapist](http://github.com/irregulargentlew
         last_response.should be_ok
       end
     end
+{% endhighlight %}
 
 with a somewhat cryptic error:
 
@@ -35,6 +37,7 @@ At first, given that tests were consistently failing when I made a get request, 
 
 What was helpful was going into spec_helper_integration.rb.
 
+{% highlight ruby %}
     require 'rack/test'
     ENV['RACK_ENV'] = 'test'
     
@@ -57,9 +60,11 @@ What was helpful was going into spec_helper_integration.rb.
     before(:all) do
       DB[:blacklist].multi_insert(YAML.load_file(File.join(File.dirname(__FILE__), 'fixtures', 'blacklist.yml')))
     end
+{% endhighlight %}
 
 Wait, what's that? A before block outside of an RSpec context? Naturally, putting it in the config block where it belonged solved the problem entirely.
 
+{% highlight ruby %}
     RSpec.configure do |config|
       config.include Rack::Test::Methods
 
@@ -67,5 +72,6 @@ Wait, what's that? A before block outside of an RSpec context? Naturally, puttin
         DB[:blacklist].multi_insert(YAML.load_file(File.join(File.dirname(__FILE__), 'fixtures', 'blacklist.yml')))
       end
     end
+{% endhighlight %}
 
 Some errors aren't so puzzling after all. Some day I ought to probably follow up on this, and figure out *why* it was manifesting in precisely this way. I'm not entirely sure how to patch RSpec to give a more helpful error message in this context, since the error was caused by me defining things out of RSpec's scope. This is unfortunate.

@@ -22,6 +22,9 @@ $crimson: 'Crimson', serif;
 @include font-face('News Cycle', font-files('news-cycle/NewsCycle-Regular.ttf'));
 $news-cycle: 'News Cycle', sans-serif;
 
+@include font-face('New Cicle', font-files('New-Cicle/New_Cicle_Fina.ttf'));
+$new-cicle: 'New Cicle', sans-serif;
+
 // colors
 
 $light-blue: #E0EFF1;
