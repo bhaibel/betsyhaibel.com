@@ -2,6 +2,7 @@
 // Imports
 
 @import "susy";
+@import "compass/css3/font-face";
 
 // ---------------------------------------------------------------------------
 // Basic Grid
@@ -13,9 +14,20 @@ $grid-padding   : $gutter-width;
 
 $show-grid-backgrounds  : true;
 
+// fonts
+
+// @include font-face('Garogier', font-files('Garogier/Garogier_unhinted.otf'));
+// $garogier: 'Garogier', serif;
+
+@include font-face('Crimson', font-files('Crimson/Crimson-Roman.otf'));
+$crimson: 'Crimson', serif;
 
 // colors
 
 $light-blue: #E0EFF1;
 $dark-blue: #7DB4B5;
 $purple: #680148;
+
+// other
+
+$content-div: '.content';

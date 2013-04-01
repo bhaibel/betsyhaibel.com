@@ -8,6 +8,7 @@ css_dir = "assets/themes/greenpurple/stylesheets"
 sass_dir = "assets/themes/greenpurple/scss"
 images_dir = "assets/themes/greenpurple/images"
 javascripts_dir = "assets/themes/greenpurple/javascripts"
+fonts_dir = "assets/themes/greenpurple/fonts"
 
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded or :nested or :compact or :compressed

@@ -26,9 +26,38 @@ nav {
   }
 }
 
+#{$content-div} > h1 {
+  margin-bottom: .25em;
+}
+
+.blurb {
+  p, ul {
+    margin: 0;
+  }
+  p {
+    @include span-columns(9 omega, 12);
+    @include pre(3);
+  }
+  ul {
+    @include span-columns(7 omega, 12);
+    @include pre(5);
+  }
+}
+
 section {
-  h2 {
-    display: inline-block;
+  clear: both;
+}
+
+section section {
+  h1 {
+    margin-bottom: .5em;
+  }
+  .metadata {
+    @include span-columns(2, 12);    
+  }
+  ul {
+    @include span-columns(9 omega, 12);
+    margin-bottom: 2em;
   }
 }
 
@@ -36,7 +65,7 @@ section {
 /* Fonts */
 
 body {
-  font-family: 'Alegreya', serif;
+  font-family: $crimson;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -44,7 +73,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
 }
 
-h1 {
+#{$content-div} > h1 {
   text-align: center;
   font-size: 4em;
 }
@@ -52,10 +81,14 @@ h1 {
 section {
   h1 {
     font-size: 2em;
-    text-align: left;
   }
-  h2 {
-    font-size: 1.25em;
+  section {
+    h1 {
+      font-size: 1.25em;
+    }
+    h2 {
+      font-size: 1em;
+    }
   }
 }
 
@@ -70,11 +103,11 @@ a, a:link {
 /* -------------------------------------------------------------------------*/
 /* froufrouraw */
 
-section {
-  @include single-box-shadow($color: $light-blue, $spread: .5em, $blur: 2em, $inset: true);
-  border: 1px dashed $dark-blue;
-}
+// section {
+//   @include single-box-shadow($color: $light-blue, $spread: .5em, $blur: 2em, $inset: true);
+//   border: 1px dashed $dark-blue;
+// }
 
-section h1 {
-  border-bottom: 2px dashed $dark-blue;
-}
+// section h1 {
+//   border-bottom: 2px dashed $dark-blue;
+// }

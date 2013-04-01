@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Crimson";
+  src: url('/assets/themes/greenpurple/fonts/Crimson/Crimson-Roman.otf') format('opentype');
+}
+
 /* -------------------------------------------------------------------------*/
 /* Layout */
 /* line 10, ../scss/screen.scss */
@@ -39,43 +44,95 @@ nav li:last-of-type {
   display: inline;
 }
 
-/* line 30, ../scss/screen.scss */
-section h2 {
-  display: inline-block;
+/* line 29, ../scss/screen.scss */
+.content > h1 {
+  margin-bottom: .25em;
+}
+
+/* line 34, ../scss/screen.scss */
+.blurb p, .blurb ul {
+  margin: 0;
+}
+/* line 37, ../scss/screen.scss */
+.blurb p {
+  width: 74.57627%;
+  float: right;
+  margin-right: 0;
+  *margin-left: -1em;
+  display: inline;
+  margin-left: 25.42373%;
+}
+/* line 41, ../scss/screen.scss */
+.blurb ul {
+  width: 57.62712%;
+  float: right;
+  margin-right: 0;
+  *margin-left: -1em;
+  display: inline;
+  margin-left: 42.37288%;
+}
+
+/* line 47, ../scss/screen.scss */
+section {
+  clear: both;
+}
+
+/* line 52, ../scss/screen.scss */
+section section h1 {
+  margin-bottom: .5em;
+}
+/* line 55, ../scss/screen.scss */
+section section .metadata {
+  width: 15.25424%;
+  float: left;
+  margin-right: 1.69492%;
+  display: inline;
+}
+/* line 58, ../scss/screen.scss */
+section section ul {
+  width: 74.57627%;
+  float: right;
+  margin-right: 0;
+  *margin-left: -1em;
+  display: inline;
+  margin-bottom: 2em;
 }
 
 /* -------------------------------------------------------------------------*/
 /* Fonts */
-/* line 38, ../scss/screen.scss */
+/* line 67, ../scss/screen.scss */
 body {
-  font-family: 'Alegreya', serif;
+  font-family: "Crimson", serif;
 }
 
-/* line 42, ../scss/screen.scss */
+/* line 71, ../scss/screen.scss */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Quicksand', sans-serif;
   font-weight: normal;
 }
 
-/* line 47, ../scss/screen.scss */
-h1 {
+/* line 76, ../scss/screen.scss */
+.content > h1 {
   text-align: center;
   font-size: 4em;
 }
 
-/* line 53, ../scss/screen.scss */
+/* line 82, ../scss/screen.scss */
 section h1 {
   font-size: 2em;
-  text-align: left;
 }
-/* line 57, ../scss/screen.scss */
-section h2 {
+/* line 86, ../scss/screen.scss */
+section section h1 {
   font-size: 1.25em;
+}
+/* line 89, ../scss/screen.scss */
+section section h2 {
+  font-size: 1em;
 }
 
 /* -------------------------------------------------------------------------*/
 /* Colors */
-/* line 65, ../scss/screen.scss */
+/* line 98, ../scss/screen.scss */
 a, a:link {
   color: #680148;
   text-decoration: none;
@@ -83,15 +140,3 @@ a, a:link {
 
 /* -------------------------------------------------------------------------*/
 /* froufrouraw */
-/* line 73, ../scss/screen.scss */
-section {
-  -webkit-box-shadow: inset 0px 0px 2em 0.5em #e0eff1;
-  -moz-box-shadow: inset 0px 0px 2em 0.5em #e0eff1;
-  box-shadow: inset 0px 0px 2em 0.5em #e0eff1;
-  border: 1px dashed #7db4b5;
-}
-
-/* line 78, ../scss/screen.scss */
-section h1 {
-  border-bottom: 2px dashed #7db4b5;
-}
