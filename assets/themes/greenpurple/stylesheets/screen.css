@@ -118,41 +118,60 @@ pre {
   padding: 1em;
 }
 
+/* line 73, ../scss/screen.scss */
+.pagination {
+  border-top: #026873 1px dashed;
+  border-bottom: #026873 1px dashed;
+}
+
+/* line 83, ../scss/screen.scss */
+.pagination ul li {
+  list-style-type: none;
+  display: inline-block;
+}
+/* line 86, ../scss/screen.scss */
+.pagination ul li:last-of-type::after {
+  content: "\00b7";
+  padding-right: 5px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
 /* -------------------------------------------------------------------------*/
 /* Fonts */
-/* line 76, ../scss/screen.scss */
+/* line 97, ../scss/screen.scss */
 body {
   font-family: "Crimson", serif;
 }
 
-/* line 80, ../scss/screen.scss */
-h1, h2, h3, h4, h5, h6 {
+/* line 101, ../scss/screen.scss */
+h1, h2, h3, h4, h5, h6, .date {
   font-family: "News Cycle", sans-serif;
   font-weight: normal;
 }
 
-/* line 85, ../scss/screen.scss */
+/* line 106, ../scss/screen.scss */
 .content > h1 {
   text-align: center;
   font-size: 4em;
 }
 
-/* line 91, ../scss/screen.scss */
+/* line 112, ../scss/screen.scss */
 section h1 {
   font-size: 2em;
 }
-/* line 95, ../scss/screen.scss */
+/* line 116, ../scss/screen.scss */
 section section h1 {
   font-size: 1.25em;
 }
-/* line 98, ../scss/screen.scss */
+/* line 119, ../scss/screen.scss */
 section section h2 {
   font-size: 1em;
 }
 
 /* -------------------------------------------------------------------------*/
 /* Colors */
-/* line 107, ../scss/screen.scss */
+/* line 128, ../scss/screen.scss */
 a, a:link {
   color: #680148;
   text-decoration: none;
@@ -160,35 +179,35 @@ a, a:link {
 
 /* -------------------------------------------------------------------------*/
 /* froufrouraw */
-/* line 125, ../scss/screen.scss */
+/* line 146, ../scss/screen.scss */
 body {
   background-color: #026873;
   background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.07) 50%, transparent 50%), linear-gradient(90deg, rgba(255, 255, 255, 0.13) 50%, transparent 50%), linear-gradient(90deg, transparent 50%, rgba(255, 255, 255, 0.17) 50%), linear-gradient(90deg, transparent 50%, rgba(255, 255, 255, 0.19) 50%);
   background-size: 13px, 29px, 37px, 53px;
 }
 
-/* line 133, ../scss/screen.scss */
+/* line 154, ../scss/screen.scss */
 .container {
   background-color: #fff;
   background-color: rgba(255, 255, 255, 0.7);
 }
 
-/* line 137, ../scss/screen.scss */
+/* line 158, ../scss/screen.scss */
 a, a:link {
   color: #026873;
 }
 
-/* line 140, ../scss/screen.scss */
+/* line 161, ../scss/screen.scss */
 a:hover, a:focus {
   border-bottom: solid 1px #026873;
 }
 
-/* line 144, ../scss/screen.scss */
+/* line 165, ../scss/screen.scss */
 ul li {
   list-style-type: none;
 }
 
-/* line 145, ../scss/screen.scss */
+/* line 166, ../scss/screen.scss */
 .content ul li::before {
   content: "\00b7";
   padding-right: 5px;
