@@ -22,6 +22,9 @@ $show-grid-backgrounds  : true;
 @include font-face('Crimson', font-files('Crimson/Crimson-Roman.otf'));
 $crimson: 'Crimson', serif;
 
+@include font-face('Springsteel Light', font-files('SpringsteelLight/springsteel-lig-webfont.ttf'));
+$springsteel-light: 'Springsteel Light', sans-serif;
+
 // colors
 
 $light-blue: #E0EFF1;

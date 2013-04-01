@@ -3,6 +3,11 @@
   src: url('/assets/themes/greenpurple/fonts/Crimson/Crimson-Roman.otf') format('opentype');
 }
 
+@font-face {
+  font-family: "Springsteel Light";
+  src: url('/assets/themes/greenpurple/fonts/SpringsteelLight/springsteel-lig-webfont.ttf') format('truetype');
+}
+
 /* -------------------------------------------------------------------------*/
 /* Layout */
 /* line 10, ../scss/screen.scss */
@@ -107,7 +112,7 @@ body {
 
 /* line 71, ../scss/screen.scss */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Quicksand', sans-serif;
+  font-family: "Springsteel Light", sans-serif;
   font-weight: normal;
 }
 
@@ -140,3 +145,38 @@ a, a:link {
 
 /* -------------------------------------------------------------------------*/
 /* froufrouraw */
+/* line 116, ../scss/screen.scss */
+body {
+  background-color: #026873;
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.07) 50%, transparent 50%), linear-gradient(90deg, rgba(255, 255, 255, 0.13) 50%, transparent 50%), linear-gradient(90deg, transparent 50%, rgba(255, 255, 255, 0.17) 50%), linear-gradient(90deg, transparent 50%, rgba(255, 255, 255, 0.19) 50%);
+  background-size: 13px, 29px, 37px, 53px;
+}
+
+/* line 124, ../scss/screen.scss */
+.container {
+  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* line 128, ../scss/screen.scss */
+a, a:link {
+  color: #026873;
+}
+
+/* line 131, ../scss/screen.scss */
+a:hover, a:focus {
+  border-bottom: solid 1px #026873;
+}
+
+/* line 135, ../scss/screen.scss */
+ul li {
+  list-style-type: none;
+}
+
+/* line 136, ../scss/screen.scss */
+.content ul li::before {
+  content: "\00b7";
+  padding-right: 5px;
+  font-size: 16px;
+  font-weight: bold;
+}

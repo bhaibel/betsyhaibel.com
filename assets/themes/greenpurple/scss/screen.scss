@@ -69,7 +69,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Quicksand', sans-serif;
+  font-family: $springsteel-light;
   font-weight: normal;
 }
 
@@ -111,3 +111,31 @@ a, a:link {
 // section h1 {
 //   border-bottom: 2px dashed $dark-blue;
 // }
+
+
+body {
+background-color: #026873;
+background-image: linear-gradient(90deg, rgba(255,255,255,.07) 50%, transparent 50%),
+linear-gradient(90deg, rgba(255,255,255,.13) 50%, transparent 50%),
+linear-gradient(90deg, transparent 50%, rgba(255,255,255,.17) 50%),
+linear-gradient(90deg, transparent 50%, rgba(255,255,255,.19) 50%);
+background-size: 13px, 29px, 37px, 53px;
+}
+.container {
+background-color: #fff;
+background-color: rgba(255, 255, 255, 0.7);
+}
+a, a:link {
+color: #026873;
+}
+a:hover, a:focus {
+border-bottom: solid 1px #026873;
+}
+
+ul li { list-style-type: none; }
+.content ul li::before {
+content: "\00b7";
+padding-right: 5px;
+font-size: 16px;
+font-weight: bold;
+}
