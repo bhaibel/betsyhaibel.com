@@ -46,6 +46,9 @@ nav {
 
 section {
   clear: both;
+  li {
+    text-indent: -.65em;
+  }
 }
 
 section section {
@@ -64,9 +67,6 @@ section section {
 pre {
   margin-right: 3em;
   margin-left: 3em;
-  border-right: #026873 4px solid;
-  border-left: #026873 4px solid;
-  background-color: rgba(2,104,115,.5);
   padding: 1em;
 }
 
@@ -83,12 +83,6 @@ pre {
 .pagination ul li {
   list-style-type: none;
   display: inline-block;
-  &:last-of-type::after {
-    content: "\00b7";
-    padding-right: 5px;
-    font-size: 16px;
-    font-weight: bold;
-  }
 }
 
 /* -------------------------------------------------------------------------*/
@@ -122,15 +116,15 @@ section {
   }
 }
 
-/* -------------------------------------------------------------------------*/
-/* Colors */
+// /* -------------------------------------------------------------------------*/
+// /* Colors */
 
-a, a:link {
-  color: $purple;
-  text-decoration: none;
-}
+// a, a:link {
+//   color: $purple;
+//   text-decoration: none;
+// }
 
-/* -------------------------------------------------------------------------*/
+// /* -------------------------------------------------------------------------*/
 /* froufrouraw */
 
 // section {
@@ -144,28 +138,38 @@ a, a:link {
 
 
 body {
-background-color: #026873;
-background-image: linear-gradient(90deg, rgba(255,255,255,.07) 50%, transparent 50%),
-linear-gradient(90deg, rgba(255,255,255,.13) 50%, transparent 50%),
-linear-gradient(90deg, transparent 50%, rgba(255,255,255,.17) 50%),
-linear-gradient(90deg, transparent 50%, rgba(255,255,255,.19) 50%);
-background-size: 13px, 29px, 37px, 53px;
+  background-color: $teal;
+  background-image: linear-gradient(90deg, rgba(white,.07) 50%, transparent 50%),
+  linear-gradient(90deg, rgba(255,255,255,.13) 50%, transparent 50%),
+  linear-gradient(90deg, transparent 50%, rgba(255,255,255,.17) 50%),
+  linear-gradient(90deg, transparent 50%, rgba(255,255,255,.19) 50%);
+  background-size: 13px, 29px, 37px, 53px;
 }
 .container {
 background-color: #fff;
 background-color: rgba(255, 255, 255, 0.7);
 }
-a, a:link {
-color: #026873;
-}
-a:hover, a:focus {
-border-bottom: solid 1px #026873;
+
+pre {
+  border-right: $teal 4px solid;
+  border-left: $teal 4px solid;
+  background-color: rgba($teal,.5);
 }
 
-ul li { list-style-type: none; }
-.content ul li::before {
-content: "\00b7";
-padding-right: 5px;
-font-size: 16px;
-font-weight: bold;
+a, a:link {
+color: $teal;
+text-decoration: none;
+}
+a:hover, a:focus {
+border-bottom: solid 1px $teal;
+}
+
+ul li {
+  list-style-type: none;
+  .content &::before, .pagination &:last-of-type::after {
+    content: "\00b7";
+    padding-right: 5px;
+    font-size: 16px;
+    font-weight: bold;
+  }
 }
