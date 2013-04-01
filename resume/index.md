@@ -103,10 +103,10 @@ description: ""
   <h1>Education:</h1>
 
   <ul>
-    <li>University of Maryland, computer and information science major</li>
+    <li>University of Maryland, computer and information science major (28 credits completed)</li>
     <li>Montgomery College, technical theater major (54 credits completed)</li>
     <li>Montgomery Blair High School Math/Science/Computer Science Magnet program, grad. 2004</li>
   </ul>
 </section>
 
-## **References** available upon [request](mailto:betsy.haibel@gmail.com).
+## For further information, [contact me](mailto:betsy.haibel@gmail.com).
