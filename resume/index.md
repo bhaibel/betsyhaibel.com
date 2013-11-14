@@ -33,11 +33,20 @@ description: ""
   <h1>Professional Experience</h1>
 
   <section>
+    <h1>Senior Software Engineer</h1>
+    <div class='metadata'>
+      <h2 class='organization'>LearnZillion</h2>
+      <h2 class='location'>Washington, DC</h2>
+      <h2 class='time'>May 2013 - present</h2>
+    </div>
+  </section>
+
+  <section>
     <h1>Senior Ruby Developer</h1>
     <div class='metadata'>
       <h2 class='organization'>Telcare</h2>
       <h2 class='location'>Bethesda, MD</h2>
-      <h2 class='time'>November 2011 - present</h2>
+      <h2 class='time'>November 2011 - May 2013</h2>
     </div>
 
     <ul>
