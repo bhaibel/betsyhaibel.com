@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Type Mismatch errors and RSpec</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="/css/normalize.css">
+        <link rel="stylesheet" href="/css/screen.css">
+        <link rel="stylesheet" href="/css/pygments.css">
+
+        <script src="js/vendor/modernizr-2.6.1.min.js"></script>
+    </head>
+    <body class='' >
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+        <div class="container">
+            <header>
+                <h1> Betsy Haibel has an Online Presence</h1>
+            </header>
+
+            <nav>
+              <ul>
+                <li>
+                  <a href="/writing">Writing</a>
+                </li>
+                <li>
+                  <a href="https://github.com/bhaibel">Code</a>
+                </li>
+                <li>
+                  <a href="https://twitter.com/betsythemuffin">Twitter</a>
+                </li>
+                <li>
+                  <a href="/resume">Resume</a>
+                </li>
+              </ul>
+            </nav>
+
+          <div class="content">
+            <p>Some notes, for the public benefit, on some RSpec troubleshooting I&rsquo;ve been doing lately. The error was ultimately a really dumb error, but the error messages I was getting were not helpful.</p>
+
+<p>My integration tests for <a href="http://github.com/irregulargentlewomen/ratedrforrapist">Rated R for Rapist</a> had been consistently failing, every last one, even the most basic:</p>
+<pre class="highlight ruby">    <span class="n">require_relative</span> <span class="s1">'../spec_helper_integration'</span>
+
+    <span class="n">describe</span> <span class="s2">"serving the root page"</span> <span class="k">do</span>
+      <span class="n">before</span> <span class="k">do</span>
+        <span class="n">get</span> <span class="s1">'/'</span>
+      <span class="k">end</span>
+
+      <span class="n">it</span> <span class="s2">"should respond with a 200"</span> <span class="k">do</span>
+        <span class="n">last_response</span><span class="p">.</span><span class="nf">should</span> <span class="n">be_ok</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+</pre>
+
+<p>with a somewhat cryptic error:</p>
+<pre class="highlight plaintext">1) serving the root page should respond with a 200
+   Failure/Error: get '/'
+   TypeError:
+     type mismatch: String given
+   # ./spec/integration/render_page_spec.rb:5:in `block (2 levels) in &lt;top (required)&gt;'
+</pre>
+
+<p>At first, given that tests were consistently failing when I made a get request, I assumed the issue was some obscure Rack::Test thing, one that perhaps had to do with Sinatra integration and/or regexp parsing. Google was unhelpful on this point, as was reading the Rack::Test source.</p>
+
+<p>What was helpful was going into spec<em>helper</em>integration.rb.</p>
+<pre class="highlight ruby">    <span class="nb">require</span> <span class="s1">'rack/test'</span>
+    <span class="no">ENV</span><span class="o">[</span><span class="s1">'RACK_ENV'</span><span class="o">]</span> <span class="o">=</span> <span class="s1">'test'</span>
+
+    <span class="n">require_relative</span> <span class="s1">'../server'</span>
+
+    <span class="c1"># setup test environment</span>
+    <span class="n">set</span> <span class="ss">:environment</span><span class="p">,</span> <span class="ss">:test</span>
+    <span class="n">set</span> <span class="ss">:run</span><span class="p">,</span> <span class="kp">false</span>
+    <span class="n">set</span> <span class="ss">:raise_errors</span><span class="p">,</span> <span class="kp">true</span>
+    <span class="n">set</span> <span class="ss">:logging</span><span class="p">,</span> <span class="kp">false</span>
+
+    <span class="k">def</span> <span class="nf">app</span>
+      <span class="no">Sinatra</span><span class="o">::</span><span class="no">Application</span>
+    <span class="k">end</span>
+
+    <span class="no">RSpec</span><span class="p">.</span><span class="nf">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+      <span class="n">config</span><span class="p">.</span><span class="nf">include</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Test</span><span class="o">::</span><span class="no">Methods</span>
+    <span class="k">end</span>
+
+    <span class="n">before</span><span class="p">(</span><span class="ss">:all</span><span class="p">)</span> <span class="k">do</span>
+      <span class="no">DB</span><span class="o">[</span><span class="ss">:blacklist</span><span class="o">]</span><span class="p">.</span><span class="nf">multi_insert</span><span class="p">(</span><span class="no">YAML</span><span class="p">.</span><span class="nf">load_file</span><span class="p">(</span><span class="no">File</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">),</span> <span class="s1">'fixtures'</span><span class="p">,</span> <span class="s1">'blacklist.yml'</span><span class="p">)))</span>
+    <span class="k">end</span>
+</pre>
+
+<p>Wait, what&rsquo;s that? A before block outside of an RSpec context? Naturally, putting it in the config block where it belonged solved the problem entirely.</p>
+<pre class="highlight ruby">    <span class="no">RSpec</span><span class="p">.</span><span class="nf">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+      <span class="n">config</span><span class="p">.</span><span class="nf">include</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Test</span><span class="o">::</span><span class="no">Methods</span>
+
+      <span class="n">config</span><span class="p">.</span><span class="nf">before</span><span class="p">(</span><span class="ss">:suite</span><span class="p">)</span> <span class="k">do</span>
+        <span class="no">DB</span><span class="o">[</span><span class="ss">:blacklist</span><span class="o">]</span><span class="p">.</span><span class="nf">multi_insert</span><span class="p">(</span><span class="no">YAML</span><span class="p">.</span><span class="nf">load_file</span><span class="p">(</span><span class="no">File</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="no">File</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="kp">__FILE__</span><span class="p">),</span> <span class="s1">'fixtures'</span><span class="p">,</span> <span class="s1">'blacklist.yml'</span><span class="p">)))</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+</pre>
+
+<p>Some errors aren&rsquo;t so puzzling after all. Some day I ought to probably follow up on this, and figure out <em>why</em> it was manifesting in precisely this way. I&rsquo;m not entirely sure how to patch RSpec to give a more helpful error message in this context, since the error was caused by me defining things out of RSpec&rsquo;s scope. This is unfortunate.</p>
+
+          </div>
+
+          <footer>
+            <p>&copy; 2014 Betsy Haibel
+            </p>
+          </footer>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.0.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>
