@@ -1,11 +1,6 @@
 ---
-layout: post
 title: "Type Mismatch errors and RSpec"
-description: ""
-category: 
-tags: []
 ---
-{% include JB/setup %}
 
 Some notes, for the public benefit, on some RSpec troubleshooting I've been doing lately. The error was ultimately a really dumb error, but the error messages I was getting were not helpful.
 
