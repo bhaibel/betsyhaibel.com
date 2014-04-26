@@ -1,0 +1,49 @@
+---
+title: Writing
+links:
+  -
+    title: Type Mismatch Errors and RSpec
+    description: in which a bizarre error is troubleshot
+    link: /devblog/2013-03-17-type-mismatch-errors-and-rspec
+    categories: Tech Itself
+  -
+    title: ActiveRecord::Base.first Is Nondeterministic
+    description: in which a bizarre error is troubleshot
+    link: /devblog/2013-11-19-active-record-base-first-is-nondeterministic
+    categories: Tech Itself
+  -
+    title: Midnight Suns
+    description: There's more light than I expected, under the ocean that drowns the day.
+    link: http://plungemagazine.com/issue-one/short-stories/midnight-suns
+    categories: Fiction
+  -
+    title: Empathy for the Truth-Tellers
+    description: Don't dismiss honest anger because it's angry.
+    link: https://medium.com/p/816abb069ddf
+    categories: Tech Culture
+  -
+    title: Drinkups Are Rape Culture
+    description: Bodily autonomy isn’t only about sex.
+    link: https://medium.com/the-power-of-harassment/29ea1546e91d
+    categories: Tech Culture
+  -
+    title: There and Back Again
+    description: '#mynerdstory'
+    link: https://medium.com/mynerdstory-on-medium/be1a841da52f
+    categories: Tech Culture
+  -
+    title: Toxic Until Proven Healthy
+    description: Why people don't trust *your* startup's culture.
+    link: https://medium.com/p/8365881cfc4c
+    categories: Tech Culture
+---
+
+<% current_page.data.links.group_by { |info| info['categories'] }.each do |category, links| %>
+    <h2><%= category %></h2>
+    <% links.each do |link| %>
+        <% link_to link['link'] do %>
+            <h3><%= link['title'] %></h3>
+        <% end %>
+        <p><%= link['description'] %></p>
+    <% end %>
+<% end %>
