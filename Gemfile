@@ -7,6 +7,8 @@ gem 'middleman-blog'
 gem 'middleman-syntax'
 gem 'redcarpet'
 
+gem 'middleman-gh-pages'
+
 # Live-reloading plugin
 gem "middleman-livereload", "~> 3.1.0"
 
