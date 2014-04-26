@@ -1,9 +1,8 @@
 ---
-layout: page
 title: "Betsy Haibel"
-description: ""
 ---
-{% include JB/setup %}
+
+<h1>Betsy Haibel</h1>
 
 <section markdown='1' class='blurb'>
 <p>is a full-stack web developer</p>
@@ -39,6 +38,10 @@ description: ""
       <h2 class='location'>Washington, DC</h2>
       <h2 class='time'>May 2013 - present</h2>
     </div>
+    <ul>
+      <li>Maintained and did day-to-day feature development for Rails-based ed-tech application.</li>
+      <li>Evangelized for, and got, a gradual migration of the app test suite from a non-DRY hodgepodge of custom helpers to something which followed RSpec convention.</li>
+    </ul>
   </section>
 
   <section>
