@@ -47,12 +47,16 @@
 #   end
 # end
 
+set :markdown_engine, :redcarpet
+set :markdown, fenced_code_blocks: true, smartypants: true
+
 set :css_dir, 'css'
 set :js_dir, 'js'
 set :images_dir, 'img'
 set :fonts_dir, 'fonts'
 
 activate :directory_indexes
+activate :syntax
 
 # Build-specific configuration
 configure :build do
