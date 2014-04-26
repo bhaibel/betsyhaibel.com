@@ -27,9 +27,9 @@ After a test run succeeded in having the third-party effect I wanted, I checked 
 
 ![nope-rocket.gif](http://i1302.photobucket.com/albums/ag137/nelsonmonty/nope_zpsbcc14df0.gif)
 
-Several very confused pry-debugger sessions later, I noted that the ids returned by my {% highlight ruby %}`self`{% endhighight %} call in the middle of prying and the id returned by {% highlight ruby %}`TestedModel.first`{% endhighight %} ... did not match.
+Several very confused pry-debugger sessions later, I noted that the ids returned by my {% highlight ruby %}`self`{% endhighlight %} call in the middle of prying and the id returned by {% highlight ruby %}`TestedModel.first`{% endhighlight %} ... did not match.
 
-It turns out that {% highlight ruby %}`ActiveRecord::Base.first`{% endhighight %} is nondetermininistic. It generates SQL that looks something like {% highlight sql %}`select * from table_name limit 1`{% endhighight %}, and the order of selects when no specific order clause is included is nondeterministic in the official SQL specification. It's easy to forget that. The default order is *typically* creation order and creation order *typically* tracks ascending order by id in a Rails application. However, because computers are computers, it's important to remember that **typically != always**.
+It turns out that {% highlight ruby %}`ActiveRecord::Base.first`{% endhighlight %} is nondetermininistic. It generates SQL that looks something like {% highlight sql %}`select * from table_name limit 1`{% endhighlight %}, and the order of selects when no specific order clause is included is nondeterministic in the official SQL specification. It's easy to forget that. The default order is *typically* creation order and creation order *typically* tracks ascending order by id in a Rails application. However, because computers are computers, it's important to remember that **typically != always**.
 
 Amusingly, {% highlight ruby %}`ActiveRecord::Base.last`{% endhighlight %} *is* deterministic. In order to retrieve the "last" record while still imposing a limit of 1 record retrieved, a descending order on *some* attribute must be imposed, like so: {% highlight sql %}`select * from table_name order by table_name.id desc limit 1`{% endhighlight %}.
 
