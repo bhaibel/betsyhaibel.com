@@ -58,6 +58,8 @@ set :fonts_dir, 'fonts'
 activate :directory_indexes
 activate :syntax
 
+page '/talks/bright-metaprogramming-future/slides.html', layout: 'reveal'
+
 # Build-specific configuration
 configure :build do
   # For example, change the Compass output style for deployment
