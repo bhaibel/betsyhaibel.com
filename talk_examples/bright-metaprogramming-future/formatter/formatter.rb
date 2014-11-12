@@ -17,23 +17,16 @@ class Formatter
   def format_sweater_results_for_admin
     CSV.generate do |csv|
       results.each do |result|
-        arr = Sweater.attributes_for_formatter(admin: true).map do |attribute|
-          result.send(attribute)
-        end
-        csv << arr
+        csv << result.to_formatter_data(admin: true)
       end
     end
   end
 
   def format_sweater_results_for_user
-    results.map do |x|
-      Sweater.attributes_for_formatter(admin: false).map { |attribute| result.send(attribute) } 
-    end.to_json
+    results.map(&:to_formatter_data).to_json
   end
 
   def format_hat_results_for_user
-    results.map do |x|
-      [:name, :yarn_name, :earflaps?].map { |attribute| result.send(attribute) } 
-    end.to_json
+    results.map(&:to_formatter_data).to_json
   end
 end

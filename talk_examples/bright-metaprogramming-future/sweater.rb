@@ -1,8 +1,8 @@
 class Sweater
-  def self.attributes_for_formatter(options)
+  def to_formatter_data(options)
     admin = options.fetch(:admin, false)
-    result = [:name, :yarn_name, :yardage, :sleeve_length]
-    result << [:id, :currently_promoting?] if admin
+    result = [name, yarn_name, yardage, sleeve_length]
+    result << [id, currently_promoting?] if admin
     result
   end
 end
