@@ -17,7 +17,7 @@ class Formatter
   def format_sweater_results_for_admin
     CSV.generate do |csv|
       results.each do |result|
-        arr = [:id, :name, :yarn_name, :yardage, :sleeve_length, :currently_promoting?].map do |attribute|
+        arr = sweater_attributes(admin: true).map do |attribute|
           result.send(attribute)
         end
         csv << arr
@@ -27,8 +27,15 @@ class Formatter
 
   def format_sweater_results_for_user
     results.map do |x|
-      [:name, :yarn_name, :yardage, :sleeve_length].map { |attribute| result.send(attribute) } 
+      sweater_attributes(admin: false).map { |attribute| result.send(attribute) } 
     end.to_json
+  end
+
+  def sweater_attributes(options)
+    admin = options.fetch(:admin, false)
+    result = [:name, :yarn_name, :yardage, :sleeve_length]
+    result << [:id, :currently_promoting?] if admin
+    result
   end
 
   def format_hat_results_for_user
