@@ -1,4 +1,8 @@
 class Formatter
+  def self.format_results(garment, user_type, results)
+    send("format_#{garment}_results_for_#{user_type}", results)
+  end
+
   def self.format_sweater_results_for_admin(results)
     CSV.generate do |csv|
       results.each do |result|
