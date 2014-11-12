@@ -1,6 +1,11 @@
 class Formatter
+  FORMATTERS = {
+    user:  UserFormatter,
+    admin: AdminFormatter
+  }
+
   def self.format_results(user_type, results)
-    const_get("#{user_type}Formatter", false).new(results).format
+    FORMATTERS[user_type].new(results).format
   end
 
   class AbstractFormatter
