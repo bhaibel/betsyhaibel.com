@@ -11,22 +11,18 @@ class Formatter
   end
 
   def format
-    send("format_#{garment}_results_for_#{user_type}")
+    send("format_for_#{user_type}")
   end
 
-  def format_sweater_results_for_admin
+  def format_for_user
+    results.map(&:to_formatter_data).to_json
+  end
+
+  def format_for_admin
     CSV.generate do |csv|
       results.each do |result|
         csv << result.to_formatter_data(admin: true)
       end
     end
-  end
-
-  def format_sweater_results_for_user
-    results.map(&:to_formatter_data).to_json
-  end
-
-  def format_hat_results_for_user
-    results.map(&:to_formatter_data).to_json
   end
 end
