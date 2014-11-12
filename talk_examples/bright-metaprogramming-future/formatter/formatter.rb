@@ -1,11 +1,10 @@
 class Formatter
-  def self.format_results(garment, user_type, results)
-    new(garment, user_type, results).format
+  def self.format_results(user_type, results)
+    new(user_type, results).format
   end
 
-  attr_reader :garment, :user_type, :results
-  def initialize(garment, user_type, results)
-    @garment = garment
+  attr_reader :user_type, :results
+  def initialize(user_type, results)
     @user_type = user_type
     @results = results
   end
