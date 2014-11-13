@@ -236,49 +236,11 @@ end
 </section>
 
 <section>
-
-  <pre><code class='ruby'>
-class SomeCallingClass
-  def available_patterns(options)
-    results = Searcher.search(garment, user_type, options)
-    Formatter.format_results(garment, user_type, results)
-  end
-end
-
-class Formatter
-  def self.format_results(garment, user_type, results)
-    send("format_#{garment}_results_for_#{user_type}", results)
-  end
-end
-  </code></pre>
+  <img src='images/formatter-diff-01.png' class='diff' />
 </section>
 
 <section>
-
-  <pre><code class='ruby'>
-class Formatter
-  def self.format_results(garment, user_type, results)
-    new(garment, user_type, results).format
-  end
-
-  attr_reader :garment, :user_type, :results
-  def initialize(garment, user_type, results)
-    @garment = garment
-    @user_type = user_type
-    @results = results
-  end
-
-  def format
-    send("format_#{garment}_results_for_#{user_type}")
-  end
-
-  def format_hat_results_for_user
-    results.map do |x|
-      [:name, :yarn_name, :earflaps?].map { |attribute| result.send(attribute) } 
-    end.to_json
-  end
-end
-  </code></pre>
+  <img src='images/formatter-diff-02.png' class='diff' />
 </section>
 
 <section>
@@ -305,84 +267,15 @@ end
 </section>
 
 <section>
-
-  <pre><code class='ruby'>
-class Formatter
-  def format_sweater_results_for_admin
-    CSV.generate do |csv|
-      results.each do |result|
-        arr = sweater_attributes(admin: true).map do |attribute|
-          result.send(attribute)
-        end
-        csv << arr
-      end
-    end
-  end
-
-  def format_sweater_results_for_user
-    results.map do |x|
-      sweater_attributes(admin: false).map { |attribute| result.send(attribute) } 
-    end.to_json
-  end
-
-  def sweater_attributes(options)
-    admin = options.fetch(:admin, false)
-    result = [:name, :yarn_name, :yardage, :sleeve_length]
-    result << [:id, :currently_promoting?] if admin
-    result
-  end
-end
-  </code></pre>
+  <img src='images/formatter-diff-03.png' class='diff' />
 </section>
 
 <section>
-
-  <pre><code class='ruby'>
-class Sweater
-  def self.attributes_for_formatter(admin: false)
-    admin = options.fetch(:admin, false)
-    result = [:name, :yarn_name, :yardage, :sleeve_length]
-    result << [:id, :currently_promoting?] if admin
-    result
-  end
-end
-
-class Formatter
-  def format_sweater_results_for_user
-    results.map do |x|
-      Sweater.attributes_for_formatter(admin: false).map { |attribute| result.send(attribute) } 
-    end.to_json
-  end
-end
-  </code></pre>
+  <img src='images/formatter-diff-04.png' class='diff' />
 </section>
 
 <section>
-
-  <pre><code class='ruby'>
-class Sweater
-  def to_formatter_data(admin: false)
-    admin = options.fetch(:admin, false)
-    result = [name, yarn_name, yardage, sleeve_length]
-    result << [id, currently_promoting?] if admin
-    result
-  end
-end
-
-class Formatter
-  def format_sweater_results_for_user
-    results.map(&:to_formatter_data).to_json
-  end
-
-  def format_sweater_results_for_admin
-    CSV.generate do |csv|
-      results.each do |result|
-        csv << result.to_formatter_data(admin: true)
-      end
-    end
-  end
-end
-  </code></pre>
+  <img src='images/formatter-diff-05.png' class='diff' />
 </section>
 
 <section>
@@ -409,121 +302,23 @@ end
 </section>
 
 <section>
-
-  <pre><code class='ruby'>
-class Formatter
-  def format
-    send("format_for_#{user_type}")
-  end
-
-  def format_for_user
-    results.map(&:to_formatter_data).to_json
-  end
-
-  def format_for_admin
-    CSV.generate do |csv|
-      results.each do |result|
-        csv << result.to_formatter_data(admin: true)
-      end
-    end
-  end
-end
-  </code></pre>
+  <img src='images/formatter-diff-06.png' class='diff' />
 </section>
 
 <section>
-
-  <pre><code class='ruby'>
-class SomeCallingClass
-  def available_patterns(options)
-    results = Searcher.search(garment, user_type, options)
-    Formatter.new(results).send("for_#{user_type}")
-  end
-end
-
-class Formatter
-  attr_reader :results
-  def initialize(results)
-    @results = results
-  end
-
-  def for_user
-    results.map(&:to_formatter_data).to_json
-  end
-
-  def format_for_admin
-    CSV.generate do |csv|
-      results.each do |result|
-        csv << result.to_formatter_data(admin: true)
-      end
-    end
-  end
-end
-  </code></pre>
+  <img src='images/formatter-diff-07.png' class='diff' />
 </section>
 
 <section>
-
-  <pre><code class='ruby'>
-class Formatter
-  def self.for(user_type, results)
-    const_get("#{user_type}Formatter").new(results)
-  end
-
-  class AbstractFormatter
-    attr_reader :results
-    def initialize(results)
-      @results = results
-    end
-  end
-
-  class UserFormatter < AbstractFormatter
-    def format
-      results.map(&:to_formatter_data)
-    end
-  end
-end
-  </code></pre>
+  <img src='images/formatter-diff-08.png' class='diff' />
 </section>
 
 <section>
-
-  <pre><code class='ruby'>
-class Formatter
-  def self.for(user_type, results)
-    const_get("#{user_type}Formatter").new(results)
-  end
-
-  class AbstractFormatter
-    attr_reader :results
-    def initialize(results)
-      @results = results
-    end
-  end
-
-  class UserFormatter < AbstractFormatter
-    def format
-      results.map(&:to_formatter_data)
-    end
-  end
-end
-  </code></pre>
+  <img src='images/formatter-diff-09.png' class='diff' />
 </section>
 
 <section>
-
-  <pre><code class='ruby'>
-class Formatter
-  FORMATTERS = {
-    user: UserFormatter,
-    admin: AdminFormatter
-  }
-
-  def self.for(user_type, results)
-    FORMATTERS[user_type].new(results)
-  end
-end
-  </code></pre>
+  <img src='images/formatter-diff-10.png' class='diff' />
 
   <aside class='notes'>
     Either case is plenty, though. The ability to use strings and symbols to represent methods, classes, and other Ruby abstractions variably is one of Ruby's coolest features and the fact that it can be used for evil shouldn't keep us from using it at all. It's a tool. As long as you understand how const_get works, this line is perfectly readable, and since its effects are isolated within the Formatter class it doesn't matter that it's hard to grep.
@@ -611,7 +406,7 @@ end
 class ActiveRecord::Base
   def method_missing(name, *args, &block)
     if name.ends_with('_changed?')
-      define_method :name do
+      self.class.define_method name do
         attribute_changed?(name.gsub(/_changed?/, ''))
       end
       send name
@@ -639,12 +434,12 @@ end
   <h1>#method_missing</h1>
   <h2>real-world don'ts</h2>
   <pre><code class='ruby'>
-module HasFibers
-  def fibers
-    fiber_codes.uniq.map { |code| Fiber.new(code) }
+module HasBreeds
+  def breeds
+    breed_codes.uniq.map { |code| Breed.new(code) }
   end
 
-  def fiber_codes
+  def breed_codes
     raise NotImplementedError
   end
 end
@@ -655,18 +450,17 @@ end
   <h1>#method_missing</h1>
   <h2>real-world don'ts</h2>
   <pre><code class='ruby'>
-class Yarn < ActiveRecord::Base
-  include HasFibers
+class Cat < ActiveRecord::Base
+  include HasBreeds
 end
 
-class Garment < ActiveRecord::Base
-  include HasFibers
+class Kennel < ActiveRecord::Base
+  include HasBreeds
 
-  has_many :garment_yarns
-  has_many :yarns, through: :garment_yarns
+  has_many :cats
 
-  def fiber_codes
-    joins(:yarns).pluck(:fiber_codes).uniq
+  def breed_codes
+    joins(:cats).pluck(:breed_codes).uniq
   end
 end
   </code></pre>
@@ -676,13 +470,27 @@ end
   <h1>#method_missing</h1>
   <h2>real-world don'ts</h2>
   <pre><code class='ruby'>
-module HasFibers
+module HasBreeds
   def method_missing(name, *args)
-    if name == :fiber_codes
+    if name == :breed_codes
       raise NotImplementedError
     else
       super
     end
+  end
+end
+  </code></pre>
+</section>
+
+<section>
+  <h1>#method_missing</h1>
+  <h2>real-world maybes</h2>
+  <pre><code class='ruby'>
+class Cat < ActiveRecord::Base
+  include HasBreeds
+
+  def breed_codes
+    super
   end
 end
   </code></pre>
@@ -703,7 +511,7 @@ end
 <section>
   <h1>#define_method</h1>
   <pre><code class='ruby'>
-class Sweater
+class Cat
   attr_accessor :photo
 
   def photo_url
@@ -724,7 +532,7 @@ end
 <section>
   <h1>#define_method</h1>
   <pre><code class='ruby'>
-class Sweater
+class Cat
   attr_accessor :photo
 
   %w(url name path).each do |method|
@@ -744,14 +552,14 @@ module AttachmentManager
     attr_accessor name
 
     %w(url name path).each do |method|
-      define_method "photo_#{method}" do
+      define_method "#{name}_#{method}" do
         send(name).send(method)
       end
     end
   end
 end
 
-class Sweater
+class Cat
   extend AttachmentManager
   define_attachment :photo  
 end
@@ -767,7 +575,7 @@ module AttachmentManager
       attr_accessor name
 
       %w(url name path).each do |method|
-        define_method "photo_#{method}" do
+        define_method "#{name}_#{method}" do
           send(name).send(method)
         end
       end
@@ -777,6 +585,27 @@ module AttachmentManager
 end
   </code></pre>
 </section>
+
+<section>
+  <h1>anonymous module inclusion!</h1>
+  <pre><code class='ruby'>
+module AttachmentManager
+  def define_attachment(name)
+    instance_methods = Module.new do
+      attr_accessor name
+
+      %w(url name path).each do |method|
+        define_method "#{name}_#{method}" do
+          send(name).send(method)
+        end
+      end
+    end
+    include instance_methods
+  end
+end
+  </code></pre>
+</section>
+
 
 <section>
   <h1>Takeaways</h1>
