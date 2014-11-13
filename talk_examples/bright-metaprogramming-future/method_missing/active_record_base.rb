@@ -6,4 +6,8 @@ class ActiveRecord::Base
       super
     end
   end
+
+  def respond_to_missing?(name, include_private = false)
+    name.ends_with('_changed?') || super
+  end
 end
