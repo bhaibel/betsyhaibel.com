@@ -344,15 +344,35 @@ Project#milestone_changed?
 </section>
 
 <section>
-  <h1>#method_missing</h1>
-  <h2>method lookup</h2>
-  <ul>
-    <li class='fragment'>first the object's eigenclass</li>
-    <li class='fragment'>then its class</li>
-    <li class='fragment'>then everything it inherits from</li>
-    <li class='fragment'>then start over with #method_missing</li>
-    <li class='fragment'>then give up</li>
-  </ul>
+  <img src='images/send-to-self.png' class='diff' />
+</section>
+
+<section>
+  <img src='images/lookup-chain-01.png' class='diff' />
+</section>
+
+<section>
+  <img src='images/lookup-chain-02.png' class='diff' />
+</section>
+
+<section>
+  <img src='images/lookup-chain-03.png' class='diff' />
+</section>
+
+<section>
+  <img src='images/lookup-chain-04.png' class='diff' />
+</section>
+
+<section>
+  <img src='images/lookup-chain-05.png' class='diff' />
+</section>
+
+<section>
+  <img src='images/lookup-chain-06.png' class='diff' />
+</section>
+
+<section>
+  <img src='images/lookup-chain-07.png' class='diff' />
 </section>
 
 <section>
@@ -422,11 +442,29 @@ end
   <h1>#method_missing</h1>
   <h2>don't ruin it!</h2>
   <pre><code class='ruby'>
+Project.new.respond_to? :name_changed?
+=> false
+  </code></pre>
+</section>
+
+<section>
+  <h1>#method_missing</h1>
+  <h2>don't ruin it!</h2>
+  <pre><code class='ruby'>
 class ActiveRecord::Base
   def respond_to_missing?(name, include_private = false)
     name.ends_with('_changed?') || super
   end
 end
+  </code></pre>
+</section>
+
+<section>
+  <h1>#method_missing</h1>
+  <h2>don't ruin it!</h2>
+  <pre><code class='ruby'>
+Project.new.respond_to? :name_changed?
+=> true
   </code></pre>
 </section>
 
