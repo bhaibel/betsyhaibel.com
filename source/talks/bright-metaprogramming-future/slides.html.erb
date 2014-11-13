@@ -43,6 +43,10 @@ Foo.new.send(:bar)
 </section>
 
 <section>
+  <img src='images/send-to-self.png' class='diff' />
+</section>
+
+<section>
   <h1>Object#send</h1>
   <h2>Babby's first send</h2>
 
@@ -391,51 +395,8 @@ end
 
 <section>
   <h1>#method_missing</h1>
-  <h2>in the wild (kinda...)</h2>
-  <pre><code class='ruby'>
-class ActiveRecord::Base
-  def method_missing(name, *args, &block)
-    if name.ends_with('_changed?')
-      attribute_changed?(name.gsub(/_changed?/, ''))
-    end
-  end
-end
-  </code></pre>
-</section>
-
-<section>
-  <h1>#method_missing</h1>
   <h2>don't ruin it!</h2>
-  <pre><code class='ruby'>
-class ActiveRecord::Base
-  def method_missing(name, *args, &block)
-    if name.ends_with('_changed?')
-      attribute_changed?(name.gsub(/_changed?/, ''))
-    else
-      super
-    end
-  end
-end
-  </code></pre>
-</section>
-
-<section>
-  <h1>#method_missing</h1>
-  <h2>don't ruin it!</h2>
-  <pre><code class='ruby'>
-class ActiveRecord::Base
-  def method_missing(name, *args, &block)
-    if name.ends_with('_changed?')
-      self.class.define_method name do
-        attribute_changed?(name.gsub(/_changed?/, ''))
-      end
-      send name
-    else
-      super
-    end
-  end
-end
-  </code></pre>
+  <img src='images/ar-01.png' class='diff' />
 </section>
 
 <section>
@@ -450,13 +411,7 @@ Project.new.respond_to? :name_changed?
 <section>
   <h1>#method_missing</h1>
   <h2>don't ruin it!</h2>
-  <pre><code class='ruby'>
-class ActiveRecord::Base
-  def respond_to_missing?(name, include_private = false)
-    name.ends_with('_changed?') || super
-  end
-end
-  </code></pre>
+  <img src='images/ar-02.png' class='diff' />
 </section>
 
 <section>
@@ -466,6 +421,12 @@ end
 Project.new.respond_to? :name_changed?
 => true
   </code></pre>
+</section>
+
+<section>
+  <h1>#method_missing</h1>
+  <h2>don't ruin it!</h2>
+  <img src='images/ar-03.png' class='diff' />
 </section>
 
 <section>
@@ -568,88 +529,35 @@ end
 </section>
 
 <section>
-  <h1>#define_method</h1>
-  <pre><code class='ruby'>
-class Cat
-  attr_accessor :photo
-
-  %w(url name path).each do |method|
-    define_method "photo_#{method}" do
-      photo.send(method)
-    end
-  end
-end
-  </code></pre>
+  <img src='images/cat-01.png' class='diff' />
 </section>
 
 <section>
-  <h1>using this to clean up modules</h1>
-  <pre><code class='ruby'>
-module AttachmentManager
-  def define_attachment(name)
-    attr_accessor name
-
-    %w(url name path).each do |method|
-      define_method "#{name}_#{method}" do
-        send(name).send(method)
-      end
-    end
-  end
-end
-
-class Cat
-  extend AttachmentManager
-  define_attachment :photo  
-end
-  </code></pre>
+  <img src='images/cat-02.png' class='diff' />
 </section>
 
 <section>
-  <h1>anonymous module inclusion!</h1>
-  <pre><code class='ruby'>
-module AttachmentManager
-  def define_attachment(name)
-    instance_methods = Module.new do
-      attr_accessor name
-
-      %w(url name path).each do |method|
-        define_method "#{name}_#{method}" do
-          send(name).send(method)
-        end
-      end
-    end
-    include instance_methods
-  end
-end
-  </code></pre>
+  <img src='images/anonymous-module-diff.png' class='diff' />
 </section>
 
 <section>
-  <h1>anonymous module inclusion!</h1>
-  <pre><code class='ruby'>
-module AttachmentManager
-  def define_attachment(name)
-    instance_methods = Module.new do
-      attr_accessor name
-
-      %w(url name path).each do |method|
-        define_method "#{name}_#{method}" do
-          send(name).send(method)
-        end
-      end
-    end
-    include instance_methods
-  end
-end
-  </code></pre>
+  <img src='images/anonymous-module.png' class='diff' />
 </section>
 
+<section>
+  <img src='images/anonymous-module-diff.png' class='diff' />
+</section>
+
+<section>
+  <img src='images/named-module-diff.png' class='diff' />
+</section>
 
 <section>
   <h1>Takeaways</h1>
   <ul>
     <li>It's all data to Ruby. It should be to you too.</li>
     <li>Can you grep for it? Do you need to?</li>
+    <li>Can you extend it later? Do you need to?</li>
     <li>Can you debug it later? You <strong>will</strong> need to.</li>
     <li>Does the parameter go in the method name or the method signature?</li>
     <li>Have fun!</li>
