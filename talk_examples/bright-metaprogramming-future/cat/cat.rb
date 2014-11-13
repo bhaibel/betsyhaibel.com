@@ -1,15 +1,9 @@
 class Cat
   attr_accessor :photo
 
-  def photo_url
-    photo.url
-  end
-
-  def photo_name
-    photo.name
-  end
-
-  def photo_path
-    photo.path
+  %w(url name path).each do |method|
+    define_method "photo_#{method}" do
+      photo.send(method)
+    end
   end
 end
