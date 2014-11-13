@@ -9,6 +9,7 @@ module AttachmentManager
         end
       end
     end
-    include instance_methods
+    const_set("#{name.capitalize}Methods", instance_methods)
+    include const_get("#{name.capitalize}Methods", false)
   end
 end
