@@ -59,16 +59,16 @@
 
           <div class="content">
             <p>Recently, at the office, something happened that baffled me. I was doing some third-party integration testing from the rails console, which required multiple test runs of this approximate form:</p>
-<pre class="highlight ruby">    <span class="k">def</span> <span class="nf">test_run</span>
+<pre><code class="highlight ruby">    <span class="k">def</span> <span class="nf">test_run</span>
       <span class="n">reload!</span>
       <span class="no">TestedModel</span><span class="p">.</span><span class="nf">first</span><span class="p">.</span><span class="nf">update_attribute</span> <span class="ss">:callback_triggering_attr</span><span class="p">,</span> <span class="kp">nil</span>
       <span class="no">TestedModel</span><span class="p">.</span><span class="nf">first</span><span class="p">.</span><span class="nf">update_attribute</span> <span class="ss">:callback_triggering_attr</span><span class="p">,</span> <span class="s1">'a real value'</span>
     <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>After a test run succeeded in having the third-party effect I wanted, I checked to see if the callback had also triggered the subsequent resource updates I wanted:</p>
-<pre class="highlight ruby">    <span class="no">TestedModel</span><span class="p">.</span><span class="nf">first</span><span class="p">.</span><span class="nf">some_other_attribute</span>
-</pre>
+<pre><code class="highlight ruby">    <span class="no">TestedModel</span><span class="p">.</span><span class="nf">first</span><span class="p">.</span><span class="nf">some_other_attribute</span>
+</code></pre>
 
 <p><strong>NOPE.</strong></p>
 
