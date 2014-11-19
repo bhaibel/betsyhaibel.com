@@ -669,6 +669,70 @@ end
 </section>
 
 <section>
+  <h1>Hooks</h1>
+</section>
+
+<section>
+  <h1>Hooks</h1>
+  <h2>Normal ones</h2>
+  <ul>
+    <li>.inherited</li>
+    <li>.included</li>
+    <li>.extended</li>
+  </ul>
+</section>
+
+<section>
+  <h1>Hooks</h1>
+  <h2>Weird ones</h2>
+  <ul>
+    <li>.method_added</li>
+    <li>.method_removed</li>
+    <li>.singleton_method_added</li>
+    <li>.singleton_method_removed</li>
+  </ul>
+</section>
+
+<section>
+  <h1>The only thing you need to know about hooks</h1>
+</section>
+
+<section>
+  <h1>Don't!!!!!!</h1>
+</section>
+
+<section>
+  <pre><code class='ruby'>
+module BadModuleNoCookie
+  def self.included(base)
+    base.class_eval do
+      extend ClassMethods
+      include InstanceMethods
+    end
+  end
+
+  module ClassMethods
+    # stuff
+  end
+
+  module InstanceMethods
+    # more stuff
+  end
+end
+  </code></pre>
+</section>
+
+<section>
+  <h1>Hooks</h1>
+  <h2>No, not even self.included</h2>
+  <ul>
+    <li>Don't fake multiple inheritance</li>
+    <li>Use a service object instead!</li>
+    <li>And/or a macro!</li>
+  </ul>
+</section>
+
+<section>
   <h1>Takeaways</h1>
   <ul>
     <li>It's all data to Ruby. It should be to you too.</li>
