@@ -4,6 +4,12 @@ description: A talk about metaprogramming in Ruby, and fixing bad metaprogrammin
 layout: reveal
 ---
 
+<%
+def img_link(name)
+  "/talks/bright-metaprogramming-future/images/#{name}"
+end
+%>
+
 <section>
   <h1>
     Your Bright Metaprogramming Future
@@ -25,7 +31,7 @@ layout: reveal
 </section>
 
 <section>
-  <img src='images/send-to-self.png' class='diff' />
+  <img src='<%= img_link('send-to-self.png') %>' class='diff' />
 </section>
 
 <section>
@@ -66,7 +72,7 @@ end
 </section>
 
 <section>
-  <img src='images/send-to-self.png' class='diff' />
+  <img src='<%= img_link('send-to-self.png') %>' class='diff' />
 </section>
 
 <section>
@@ -185,7 +191,7 @@ end
 </section>
 
 <section>
-  <img src='images/project-observer-diff.png' class='diff' />
+  <img src='<%= img_link('project-observer-diff.png') %>' class='diff' />
 </section>
 
 <section>
@@ -294,11 +300,11 @@ end
 </section>
 
 <section>
-  <img src='images/formatter-diff-01.png' class='diff' />
+  <img src='<%= img_link('formatter-diff-01.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/formatter-diff-02.png' class='diff' />
+  <img src='<%= img_link('formatter-diff-02.png') %>' class='diff' />
 </section>
 
 <section>
@@ -325,19 +331,19 @@ end
 </section>
 
 <section>
-  <img src='images/formatter-diff-03.png' class='diff' />
+  <img src='<%= img_link('formatter-diff-03.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/formatter-diff-04.png' class='diff' />
+  <img src='<%= img_link('formatter-diff-04.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/formatter-diff-05.png' class='diff' />
+  <img src='<%= img_link('formatter-diff-05.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/formatter-diff-06.png' class='diff' />
+  <img src='<%= img_link('formatter-diff-06.png') %>' class='diff' />
 </section>
 
 <section>
@@ -364,19 +370,19 @@ end
 </section>
 
 <section>
-  <img src='images/formatter-diff-07.png' class='diff' />
+  <img src='<%= img_link('formatter-diff-07.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/formatter-diff-08.png' class='diff' />
+  <img src='<%= img_link('formatter-diff-08.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/formatter-diff-09.png' class='diff' />
+  <img src='<%= img_link('formatter-diff-09.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/formatter-diff-10.png' class='diff' />
+  <img src='<%= img_link('formatter-diff-10.png') %>' class='diff' />
 
   <aside class='notes'>
     Either case is plenty, though. The ability to use strings and symbols to represent methods, classes, and other Ruby abstractions variably is one of Ruby's coolest features and the fact that it can be used for evil shouldn't keep us from using it at all. It's a tool. As long as you understand how const_get works, this line is perfectly readable, and since its effects are isolated within the Formatter class it doesn't matter that it's hard to grep.
@@ -384,7 +390,7 @@ end
 </section>
 
 <section>
-  <img src='images/formatter-diff-09.png' class='diff' />
+  <img src='<%= img_link('formatter-diff-09.png') %>' class='diff' />
 </section>
 
 <section>
@@ -401,19 +407,19 @@ Project#milestone_changed?
 </section>
 
 <section>
-  <img src='images/send-to-self.png' class='diff' />
+  <img src='<%= img_link('send-to-self.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/lookup-chain-01.png' class='diff' />
+  <img src='<%= img_link('lookup-chain-01.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/lookup-chain-02.png' class='diff' />
+  <img src='<%= img_link('lookup-chain-02.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/lookup-chain-03.png' class='diff' />
+  <img src='<%= img_link('lookup-chain-03.png') %>' class='diff' />
 </section>
 
 <section>
@@ -424,19 +430,19 @@ Project#milestone_changed?
 </section>
 
 <section>
-  <img src='images/lookup-chain-04.png' class='diff' />
+  <img src='<%= img_link('lookup-chain-04.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/lookup-chain-05.png' class='diff' />
+  <img src='<%= img_link('lookup-chain-05.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/lookup-chain-06.png' class='diff' />
+  <img src='<%= img_link('lookup-chain-06.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/lookup-chain-07.png' class='diff' />
+  <img src='<%= img_link('lookup-chain-07.png') %>' class='diff' />
 </section>
 
 <section>
@@ -456,7 +462,7 @@ end
 <section>
   <h1>#method_missing</h1>
   <h2>don't ruin it!</h2>
-  <img src='images/ar-01.png' class='diff' />
+  <img src='<%= img_link('ar-01.png') %>' class='diff' />
 </section>
 
 <section>
@@ -471,7 +477,7 @@ Project.new.respond_to? :name_changed?
 <section>
   <h1>#method_missing</h1>
   <h2>don't ruin it!</h2>
-  <img src='images/ar-02.png' class='diff' />
+  <img src='<%= img_link('ar-02.png') %>' class='diff' />
 </section>
 
 <section>
@@ -486,7 +492,7 @@ Project.new.respond_to? :name_changed?
 <section>
   <h1>#method_missing</h1>
   <h2>don't ruin it!</h2>
-  <img src='images/ar-03.png' class='diff' />
+  <img src='<%= img_link('ar-03.png') %>' class='diff' />
 </section>
 
 <section>
@@ -526,19 +532,19 @@ end
 </section>
 
 <section>
-  <img src='images/lookup-chain-for-ar-01.png' class='diff' />
+  <img src='<%= img_link('lookup-chain-for-ar-01.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/lookup-chain-for-ar-02.png' class='diff' />
+  <img src='<%= img_link('lookup-chain-for-ar-02.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/lookup-chain-for-ar-03.png' class='diff' />
+  <img src='<%= img_link('lookup-chain-for-ar-03.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/lookup-chain-for-ar-04.png' class='diff' />
+  <img src='<%= img_link('lookup-chain-for-ar-04.png') %>' class='diff' />
 </section>
 
 <section>
@@ -572,7 +578,7 @@ end
 </section>
 
 <section>
-  <img src='images/lookup-chain-for-ar-03.png' class='diff' />
+  <img src='<%= img_link('lookup-chain-for-ar-03.png') %>' class='diff' />
 </section>
 
 <section>
@@ -636,31 +642,31 @@ end
 </section>
 
 <section>
-  <img src='images/cat-01.png' class='diff' />
+  <img src='<%= img_link('cat-01.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/cat-02.png' class='diff' />
+  <img src='<%= img_link('cat-02.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/stormycat-inna-bag.jpg' class='diff' style='width: 70%' />
+  <img src='<%= img_link('stormycat-inna-bag.jpg') %>' class='diff' style='width: 70%' />
 </section>
 
 <section>
-  <img src='images/cat-02.png' class='diff' />
+  <img src='<%= img_link('cat-02.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/anon-module-diff.png' class='diff' />
+  <img src='<%= img_link('anon-module-diff.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/anonymous-module.png' class='diff' />
+  <img src='<%= img_link('anonymous-module.png') %>' class='diff' />
 </section>
 
 <section>
-  <img src='images/named-module-diff.png' class='diff' />
+  <img src='<%= img_link('named-module-diff.png') %>' class='diff' />
 </section>
 
 <section>
