@@ -50,7 +50,7 @@ I was using it in the context of a method that looked something like this - a st
 
 ----
 
-I did not like this code. It got the job done, but I didn't like how it got it done. I'd trained in C and Java and Perl, so I was used to the idea that method names were inviolable, and entirely separate from the data that the methods were acting upon. When you're coming from that mindset, you accept a certain amount of repetition and boilerplate as inevitable. You write thirty getter and setter methods for a class's attributes, individually, each one line long and formulaic as a Garfield strip.
+I did not like this code. It got the job done, but I didn't like how it got it done. I'd trained in C and Java and Perl, so I was used to the idea that method names were these magic computer things, entirely separate from the data that the methods were acting upon. When you're coming from that mindset, you accept a certain amount of repetition and boilerplate as inevitable. You write thirty getter and setter methods for a class's attributes, individually, each one line long and formulaic as a Garfield strip.
 
 I resented the hell out of this, but I didn't know how to improve on it. I thought you couldn't.
 
@@ -83,6 +83,8 @@ This next code is an amalgam of code I wrote and code that I've seen other peopl
 ---
 
 So, we've got some code that searches within a set of models and then sends their data on to the formatter. Now, like I was saying earlier, a lot of the time when you're using dynamic method calls you're using them to express a repetition that had previously been expressed with copypasta, and this is definitely what's going on here. Reflexively reaching for dynamic method calls to fix this problem has three traps, though.
+
+---
 
 The first is that it breaks grep. Ordinarily when I'm spelunking through new code I search for method names to see where they're defined and invoked, but I can't find where format_whatever_results_for_some_user_type is defined because I don't know what method name is really being sent. Similarly, if I'm looking at the definition for format_pants_results_for_anonymous_users, and I search for where it's used, this instance won't come up.
 
@@ -225,7 +227,7 @@ The third mistake is that we're not defining the method in the method_missing ca
 
 ---
 
-Now for a subtler mistake you can make in and around method_missing. This is one I've made within the past year - if any of my old colleages from LearnZillion are watching this, I'm *really sorry.*
+Now for a subtler mistake you can make in and around method_missing. This is one I've made relatively recently - if any of my old colleages from LearnZillion are watching this, I'm *really sorry.*
 
 So, let's say you have a mixin that relies on the breed_codes method being defined on an object.
 
@@ -311,17 +313,16 @@ This anonymous module sits within the lookup chain for us, which means that call
 
 ---
 
-If you're constitutionally opposed to the existence of anonymous modules, you can also name a dynamic module with const_set before inclusion.
+Anonymous modules break Ruby object marshalling, so you should be polite and name them, too. To do this, you can assign dynamic modules to a constant with const_set before inclusion.
 
 ---
 
 Dynamic module inclusion is, to be honest, probably the coolest trick I've learned in the past year, so now I'm out of things to talk about. Let's sum up.
 
-Metaprogramming is awesome because it lets us treat code as data. It lets us be cool-kid Lisp programmers without spending all day matching parentheses. We shouldn't be scared of it, but like all powerful tools we should treat it with the appropriate respect.
+Metaprogramming is awesome because it lets us treat code as data. It lets us pretend to be Lisp programmers without spending all day matching parentheses. We shouldn't be scared of it, but like all powerful tools we should treat it with the appropriate respect.
 
 We should make sure that in our attempts to codify patterns using metaprogramming techniques we consider our poor maintenance coders, who we will ourselves be in four months,
 and do what we can to make sure that our metaprogramming doesn't kill the ability to search for code, extend code, or debug code -- since surely we will need to do at least one of these.
-
 
 
 Finally, because this is an awesome Ruby language feature, we should treat it with the joy appropriate to a language optimized for developer happiness.
@@ -330,12 +331,12 @@ Finally, because this is an awesome Ruby language feature, we should treat it wi
 
 Now that I've said all these things, here's who I am and where you can find me on the Internet!
 
-Also, because they paid for me to come here: I work for Optoro, an e-commerce firm based in Washington, DC. We are awesome; I am only the first of four speakers we've sent this year, so make sure you check out my colleagues' talks too - tomorrow, they'll be speaking about numerical coercion, rewinding while debugging, and translating algorithms between Haskell and Ruby.
+Also: I work for Optoro. We're based in DC and are working to make the retail returns process greener and more efficient! We are awesome and pretty much always hiring, so if you're looking please talk to one of our posse.
 
-We are currently hiring junior developers; if this description fits you, come talk to me! If it does not, please consider our online outlet Blinq.com for all your cheap laptop needs.
+If you're not looking, please consider our online outlet Blinq.com for all your cheap laptop needs.
 
 ---
 
-All cat photos used in this talk are credit Nikki Murray, who also supplied photos for my colleague Chris Hoffman's talk tomorrow.
+All cat photos used in this talk are credit Nikki Murray.
 
 Questions?

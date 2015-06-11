@@ -242,6 +242,16 @@ end
 </section>
 
 <section>
+  <h1>Pitfalls of #send mazes</h1>
+  <pre><code>
+elhaibel@marianne:terrible-project$ ag 'Formatter.format_sweater_results_for_admin'
+# a remarkable lack of results
+elhaibel@marianne:terrible-project$
+  </code></pre>
+</section>
+
+
+<section>
   <pre><code class='ruby'>
 Formatter.send("format_#{garment}_results_for_#{user_type}", results)
 
