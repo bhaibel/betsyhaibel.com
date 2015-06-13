@@ -54,89 +54,9 @@ a.send(:bar, "a", 2, 5, :some_other_argument)
   </code></pre>
 </section>
 
-<section>
-  <h1>Object#send</h1>
-  <h2>The Giant Case Statement</h2>
-  <pre><code>
-class Foo
-  def send(method_name, *args)
-    case method_name.to_sym
-    when :bar
-      'baz'
-    when :a
-      'b'
-    # ....
-  end
-end
-  </code></pre>
-</section>
 
 <section>
   <img src='<%= img_link('send-to-self.png') %>' class='diff' />
-</section>
-
-<section>
-  <h1>Object#send</h1>
-  <h2>Babby's first send</h2>
-
-  <pre><code class="ruby">
-
-
-
-  Mailer.send_later :milestone_changed, project.owner, project
-
-
-
-  </code></pre>
-
-  <aside class='notes'>
-    When I was a wee baby coder - Friday, the first week of my first Ruby job - I discovered Object#send and what it could do. I'd been working with delayed_job all day to do asynchronous transactional email. For those of you not familiar with the library, its core was the method `send_later`, which looked like this and which did, more or less, what it looks like  queued a job that would invoke the sent method name. 
-  </aside>
-</section>
-
-<section>
-  <h1>Object#send</h1>
-  <h2>Babby's first send</h2>
-
-  <pre><code class="ruby">
-class ProjectObserver < ActiveRecord::Observer
-  def after_update(project)
-    if project.milestone_changed?
-      Mailer.send_later :milestone_changed, project.owner, project
-    end
-  end
-end
-  </code></pre>
-
-  <aside class="notes">
-    I was using it in the context of a method that looked something like this - a straightforward observer that looked for attribute changes that would trigger emails, and queued them for sending if appropriate. I say "something like" this because actually the method looked more like this:
-  </aside>
-</section>
-
-<section>
-  <h1>Object#send</h1>
-  <h2>Oh god what just happened</h2>
-
-  <pre><code class="ruby">
-class ProjectObserver < ActiveRecord::Observer
-  def after_update(project)
-    case
-    when project.milestone_changed?
-      Mailer.send_later :milestone_changed, project.owner, project
-    when project.name_changed?
-      Mailer.send_later :name_changed, project.owner, project
-    when project.description_changed?
-      Mailer.send_later :description_changed, project.owner, project
-    when project.target_build_day_changed?
-      Mailer.send_later :target_build_day_changed, project.owner, project
-    end
-  end
-end
-  </code></pre>
-
-  <aside class="notes">
-    (pause)
-  </aside>
 </section>
 
 <section data>
@@ -205,22 +125,6 @@ end
 
 <section>
   <h1>Object#send</h1>
-  <h2>Great triumph!</h2>
-
-  <img src="http://mashable.com/wp-content/uploads/2013/07/Tangled.gif" />
-</section>
-
-<section>
-  <h1>Object#send</h1>
-  <h2>Great triumph!</h2>
-
-  <img src="images/tangled-still.gif" />
-
-</section>
-
-
-<section>
-  <h1>Object#send</h1>
   <h2>A maze of twisty little #send calls, all alike</h2>
 </section>
 
@@ -247,36 +151,6 @@ end
 elhaibel@marianne:terrible-project$ ag 'Formatter.format_sweater_results_for_admin'
 # a remarkable lack of results
 elhaibel@marianne:terrible-project$
-  </code></pre>
-</section>
-
-
-<section>
-  <pre><code class='ruby'>
-Formatter.send("format_#{garment}_results_for_#{user_type}", results)
-
-case garment
-when 'sweater'
-  case user_type
-  when 'admin'
-    Formatter.format_sweater_results_for_admin(results)
-  when 'user'
-    Formatter.format_sweater_results_for_user(results)
-  end
-when 'hat'
-  case user_type
-  when 'admin'
-    Formatter.format_hat_results_for_admin(results)
-  when 'user'
-    Formatter.format_hat_results_for_user(results)
-  end
-end
-
-class Searcher
-  def search(garment, user_type, options)
-    results = garment.camelcase.constantize.visible_to(user_type).where(options)
-  end
-end
   </code></pre>
 </section>
 
@@ -400,7 +274,11 @@ end
 </section>
 
 <section>
-  <img src='<%= img_link('formatter-diff-09.png') %>' class='diff' />
+  <h1>Getting out of #send mazes</h1>
+  <ul>
+    <li>don't eliminate dynamism, Ruby is dynamic</li>
+    <li>just <em>encapsulate</em> it &mdash; Ruby is OO</li>
+  </ul>
 </section>
 
 <section>
@@ -497,12 +375,6 @@ Project.new.respond_to? :name_changed?
 Project.new.respond_to? :name_changed?
 => true
   </code></pre>
-</section>
-
-<section>
-  <h1>#method_missing</h1>
-  <h2>don't ruin it!</h2>
-  <img src='<%= img_link('ar-03.png') %>' class='diff' />
 </section>
 
 <section>
@@ -619,6 +491,18 @@ end
 </section>
 
 <section>
+  <h1>#method_missing</h1>
+  <h2>alternatives</h2>
+  <ul>
+    <li>options hashes</li>
+    <li>OpenStruct</code></li>
+    <li>SimpleDelegator</li>
+    <li>Forwardable</li>
+  </ul>
+</section>
+
+
+<section>
   <h1>#define_method</h1>
 </section>
 
@@ -653,6 +537,24 @@ end
 
 <section>
   <img src='<%= img_link('cat-01.png') %>' class='diff' />
+</section>
+
+<section>
+  <h1>such java, so boring, wow</h1>
+</section>
+
+<section>
+  <h1>Me!</h1>
+  <ul>
+    <li>Betsy Haibel</li>
+    <li>Optoro</li>
+    <li>betsyhaibel.com</li>
+    <li>github.com/bhaibel</li>
+    <li>@betsythemuffin</li>
+    <li>betsy.haibel@gmail.com</li>
+  </ul>
+  <h2>Slides!</h2>
+  <p>http://betsyhaibel.com/talks/bright-metaprogramming-future/slides</p>
 </section>
 
 <section>
@@ -691,19 +593,6 @@ end
   </ul>
 </section>
 
-<section>
-  <h1>Me!</h1>
-  <ul>
-    <li>Betsy Haibel</li>
-    <li>Optoro</li>
-    <li>betsyhaibel.com</li>
-    <li>github.com/bhaibel</li>
-    <li>@betsythemuffin</li>
-    <li>betsy.haibel@gmail.com</li>
-  </ul>
-  <h2>Slides!</h2>
-  <p>http://betsyhaibel.com/talks/bright-metaprogramming-future/slides</p>
-</section>
 
 <section>
   <img src="https://pbs.twimg.com/media/BvP1OdVIEAEWwkF.jpg"  style='margin-top: -12em' />
