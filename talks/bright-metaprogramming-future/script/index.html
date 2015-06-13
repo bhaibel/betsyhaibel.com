@@ -84,57 +84,31 @@
 
 <hr>
 
-<p>Using Object#send makes this a little more explicit. a.bar and a.send(:bar) are semantically equivalent, but when you visualize a method invocation using &ldquo;send&rdquo;, it makes it really clear that what you&rsquo;re actually passing to the object is a bag of arguments, the first of which must be a symbol or a string. The &ldquo;method name&rdquo; argument has a special status &ndash; it directly determines which block of code is called next,</p>
-
-<hr>
-
-<p>almost as though an object is just a giant case statement &ndash;</p>
-
-<hr>
-
-<p>&ndash; but ultimately, all the arguments in that bag of arguments are just ways of passing information to an object about what you want it to do.</p>
+<p>Using Object#send makes this a little more explicit. a.bar and a.send(:bar) are semantically equivalent, but when you visualize a method invocation using &ldquo;send&rdquo;, it makes it really clear that what you&rsquo;re actually passing to the object is a bag of arguments, the first of which must be a symbol or a string. The &ldquo;method name&rdquo; argument has a special status &ndash; it directly determines which block of code is called next, but ultimately, all the arguments in that bag of arguments are just ways of passing information to an object about what you want it to do.</p>
 
 <hr>
 
 <p>Anyway, let&rsquo;s move on to how send can be used and misused in the wild.</p>
 
-<p>When I was a wee baby coder - Friday, the first week of my first Ruby job - I discovered Object#send and what it could do. I&rsquo;d been working with delayed<em>job all day to do asynchronous transactional email. For those of you not familiar with the library, its core was the method `send</em>later`, which looked like this and which did, more or less, what it looks like  queued a job that would invoke the sent method name.</p>
+<p>When people start pulling in &ldquo;send&rdquo; statements, usually it&rsquo;s a reaction to code that looks like this. And here I&rsquo;m reconstructing code I wrote in my first week as a Rails dev, incidentally.</p>
 
 <hr>
 
-<p>I was using it in the context of a method that looked something like this - a straightforward observer that looked for attribute changes that would trigger emails, and queued them for sending if appropriate. I say &ldquo;something like&rdquo; this because actually the method looked more like this:</p>
+<p>I did not like this code. It got the job done, but I didn&rsquo;t like how it got it done. I&rsquo;d trained in C and Java and Perl, so I was used to the idea that method names were these magic computer things, entirely separate from the data that the methods were acting upon. When you&rsquo;re coming from that mindset, you accept a certain amount of repetition and boilerplate as inevitable.</p>
+
+<h2>I resented the hell out of this, but I didn&rsquo;t know how to improve on it. I thought you couldn&rsquo;t. And then I learned about the magic of &ldquo;send.&rdquo;</h2>
+
+<p>Twenty-thirty minutes later, the code looked more like this.</p>
 
 <hr>
 
-<p>(pause)</p>
+<p>Here&rsquo;s a diff, so the changes are easier to follow. I identified a pattern that had been expressed via repetition, and expressed that pattern with code instead - namely, by invoking methods dynamically using &ldquo;send&rdquo; rather than statically with copy and paste.</p>
 
 <hr>
 
-<p>I did not like this code. It got the job done, but I didn&rsquo;t like how it got it done. I&rsquo;d trained in C and Java and Perl, so I was used to the idea that method names were inviolable, and entirely separate from the data that the methods were acting upon. When you&rsquo;re coming from that mindset, you accept a certain amount of repetition and boilerplate as inevitable. You write thirty getter and setter methods for a class&rsquo;s attributes, individually, each one line long and formulaic as a Garfield strip.</p>
+<p>This is what we talk about when we say Ruby optimizes for &ldquo;developer happiness.&rdquo; I <em>hated</em> that code, and a Ruby feature let me make the ugly bits go away.</p>
 
-<p>I resented the hell out of this, but I didn&rsquo;t know how to improve on it. I thought you couldn&rsquo;t.</p>
-
-<p>And then I looked at the <code>#send_later</code> method, and cocked my head, and asked myself if its name was riffing off of something named <code>#send</code>&hellip;.</p>
-
-<hr>
-
-<p>Some Googling and twenty-thirty minutes later, the code looked more like this. I identified a pattern that had been expressed via repetition, and expressed that pattern with code instead - namely, by invoking methods dynamically using &ldquo;send&rdquo; rather than statically with copy and paste.</p>
-
-<hr>
-
-<p>And I felt like this. Or, really - uh, animated gif warning, for the epileptics in the room - </p>
-
-<hr>
-
-<p>more like this. (pause)</p>
-
-<hr>
-
-<p>Okay, open your eyes again now.</p>
-
-<p>And this is how it&rsquo;s supposed to work, right? I came from this background where I couldn&rsquo;t do a thing, and then I learned more Ruby and I could and it was a frabjous day. And also, I did something cool at 4:30 on the Friday of my first week ever doing Ruby professionally, and I was just some kid with no college degree they&rsquo;d taken on on a trial basis, so those twenty minutes probably did wonders for my job security.</p>
-
-<p>Alas and alack, for I learned the wrong lesson:</p>
+<p>Unfortunately, now I had a really big hammer &ndash; metaprogramming &ndash; and every problem started to look like a nail.</p>
 
 <hr>
 
@@ -142,17 +116,15 @@
 
 <hr>
 
-<p>So, we&rsquo;ve got some code that searches within a set of models and then sends their data on to the formatter. Now, like I was saying earlier, a lot of the time when you&rsquo;re using dynamic method calls you&rsquo;re using them to express a repetition that had previously been expressed with copypasta, and this is definitely what&rsquo;s going on here. Reflexively reaching for dynamic method calls to fix this problem has three traps, though.</p>
-
-<p>The first is that it breaks grep. Ordinarily when I&rsquo;m spelunking through new code I search for method names to see where they&rsquo;re defined and invoked, but I can&rsquo;t find where format<em>whatever</em>results<em>for</em>some<em>user</em>type is defined because I don&rsquo;t know what method name is really being sent. Similarly, if I&rsquo;m looking at the definition for format<em>pants</em>results<em>for</em>anonymous_users, and I search for where it&rsquo;s used, this instance won&rsquo;t come up.</p>
+<p>So, we&rsquo;ve got some code that searches within a set of models and then sends their data on to the formatter. This example came out of the  a lot of the time when you&rsquo;re using dynamic method calls you&rsquo;re using them to express a repetition that had previously been expressed with copypasta, and this is definitely what&rsquo;s going on here. Reflexively reaching for dynamic method calls to fix this problem has three traps, though.</p>
 
 <hr>
 
-<p>The second is that it introduces cyclomatic complexity. Cyclomatic complexity is, approximately, the number of paths that data can take through your code, and high cyclomatic complexity is a bad thing because it means you need to keep track of more things to figure out what your code&rsquo;s doing. Conditional statements like &ldquo;if&rdquo; and &ldquo;case&rdquo; increase it. Shoving an implicit conditional under a rug by using send doesn&rsquo;t make the cyclomatic complexity thus introduced go away.</p>
+<p>The biggest is that it breaks grep. Ordinarily when I&rsquo;m spelunking through new code I search for method names to see where they&rsquo;re defined and invoked, but I can&rsquo;t find where format<em>whatever</em>results<em>for</em>some<em>user</em>type is defined because I don&rsquo;t know what method name is really being sent. Similarly, if I&rsquo;m looking at the definition for format<em>pants</em>results<em>for</em>anonymous_users, and I search for where it&rsquo;s used, this instance won&rsquo;t come up.</p>
 
 <hr>
 
-<p>The third thing is that using a dynamic method call to reduce repetition at the call site often spackles over a far uglier repetition elsewhere in the code, which has happened here. Let&rsquo;s fix it!</p>
+<p>Nearly as bad is the fact that using a dynamic method call to reduce repetition at the call site often spackles over a far uglier repetition elsewhere in the code, which has happened here. Let&rsquo;s fix it!</p>
 
 <p>Now, this is a refactoring in which things are going to get uglier before they get prettier, but eventually things are gonna clear up here.</p>
 
@@ -206,7 +178,7 @@
 
 <hr>
 
-<p>We&rsquo;re not fully getting away from dynamism here - we&rsquo;re just choosing which class to instantiate dynamically, instead of which method to invoke. But now the dynamism is encapsulated within a single file and a single family of classes, so its effect on the cyclomatic complexity and searchability of the entire application is significantly reduced. And Ruby&rsquo;s capacity for dynamism is one of the best things about the language &ndash; look at how concise and pretty that const_get call is! Think about how many lines you would need to write to do the same thing in a less dynamic language! And the more code there is on the screen, the more code you need to keep in your head.</p>
+<p>We&rsquo;re not fully getting away from dynamism here - we&rsquo;re just choosing which class to instantiate dynamically, instead of which method to invoke. But now the dynamism is encapsulated within a single file and a single family of classes, so its effect on the complexity and searchability of the entire application is significantly reduced. And Ruby&rsquo;s capacity for dynamism is one of the best things about the language &ndash; look at how concise and pretty that const_get call is! Think about how many lines you would need to write to do the same thing in a less dynamic language! And the more code there is on the screen, the more code you need to keep in your head.</p>
 
 <hr>
 
@@ -214,8 +186,7 @@
 
 <hr>
 
-<p>So, let&rsquo;s go back and look at these methods again.
-These. like most of the rest of ActiveRecord, are defined using method_missing, which allows us to dynamically respond to arbitrary method names. After all, a method name is just a part, like any other, of the bag of arguments sent to an object.</p>
+<p>Most of us have seen methods like this before. These, like most of the rest of ActiveRecord, are defined using method_missing, which allows us to dynamically respond to arbitrary method names. After all, a method name is just a part, like any other, of the bag of arguments sent to an object.</p>
 
 <hr>
 
@@ -261,7 +232,7 @@ These. like most of the rest of ActiveRecord, are defined using method_missing, 
 
 <p>So, in the wild, method<em>missing looks a little like this. This is an oversimplification of how ActiveRecord uses it, but this is the general shape of it. method</em>missing gets passed the bag of arguments that you sent the object and decides what to do based on them.</p>
 
-<p>This oversimplified version of it that I&rsquo;m showing here is making three really common mistakes with the use of method_missing.</p>
+<p>This oversimplified version of it that I&rsquo;m showing here is making two really common mistakes with the use of method_missing.</p>
 
 <hr>
 
@@ -281,11 +252,7 @@ These. like most of the rest of ActiveRecord, are defined using method_missing, 
 
 <hr>
 
-<p>The third mistake is that we&rsquo;re not defining the method in the method<em>missing call. method</em>missing-based method lookup can be slow if you use the method multiple times, because you need to go alllll the way through the lookup chain each time. If you&rsquo;re going to be using a method defined this way frequently, it&rsquo;s good practice to, in effect, cache the method by explicitly defining it using define<em>method within method</em>missing.</p>
-
-<hr>
-
-<p>Now for a subtler mistake you can make in and around method_missing. This is one I&rsquo;ve made within the past year - if any of my old colleages from LearnZillion are watching this, I&rsquo;m <em>really sorry.</em></p>
+<p>Now for a subtler mistake you can make in and around method_missing. This is one I made about a year ago - if any of my old colleages from LearnZillion are watching this, I&rsquo;m <em>really sorry.</em></p>
 
 <p>So, let&rsquo;s say you have a mixin that relies on the breed_codes method being defined on an object.</p>
 
@@ -329,13 +296,15 @@ These. like most of the rest of ActiveRecord, are defined using method_missing, 
 
 <hr>
 
-<p>So, what is method_missing good for? The traditional use cases for it are pretty dynamic DSLs, like ActiveRecord finders, or pretty global config singletons like Amberbit, or objects that delegate most of their methods.</p>
+<p>So, what is method_missing good for? The traditional use cases for it are pretty dynamic DSLs, like ActiveRecord finders, or pretty global config singletons like Amberbit, or objects that delegate most of their methods, like presenters.</p>
+
+<hr>
 
 <p>But, honestly, I&rsquo;d argue that none of those are actually good uses - pretty dynamic DSLs are usually better expressed with options hashes than method names, you can use OpenStruct for extensible config objects, and Ruby has a nice built-in delegator class. Some of these use method_missing under the hood, but it&rsquo;s hidden under a nice well-maintained and well-understood interface, which isn&rsquo;t necessarily true of a more homegrown solution.</p>
 
 <hr>
 
-<p>So, how then are we to do dynamic method definition? define<em>method is slow, and like dynamic method calls with send it&rsquo;s frequently used to hide bad class design, but it&rsquo;s both a lot more flexible and a lot more explicit than method</em>missing so I prefer it.</p>
+<p>So, how then are we to do dynamic method definition? Well, mostly we shouldn&rsquo;t - but if we must, there&rsquo;s define<em>method. define</em>method, like method_missing, is <em>slow</em> - whenever you call it, you invalidate Ruby&rsquo;s method cache. And, just like send calls, it can be used to hide bad class design. But sometimes, it can make an API much cleaner.</p>
 
 <hr>
 
@@ -349,54 +318,45 @@ These. like most of the rest of ActiveRecord, are defined using method_missing, 
 
 <p>define_method lets us pull it out into a an each block. This cuts lines, and more importantly illuminates the deeper structure of the code.</p>
 
-<hr>
-
-<p>Later on in this theoretical project, we decide to isolate the attachment-definition code in its own module for later reuse.</p>
+<p>Again, this is really clear <em>at a small scale.</em> But if you&rsquo;re doing it on a larger scale - say, if you want to extract this code to anything - consider putting it in a class!</p>
 
 <hr>
 
-<p>despite the fact that most good photos are of cats.</p>
+<p>Boring, I know. But if you&rsquo;re reading someone else&rsquo;s code, do you want it to be boring or clever? Think about giving them the same courtesy.</p>
 
 <hr>
 
-<p>This code isn&rsquo;t awful, but we can take it a bit further. Right now, it&rsquo;s not very extensible. If someone using this module wants to override our definition of photo<em>url, their redefinition will be on the same class that our definition is on, because define</em>method is called by a macro within the context of the including class. If they want to include our definition within their extension, they won&rsquo;t have access to super with which to do so. Instead, they&rsquo;ll either need to copypaste our definition in or resort to an ugly workaround like rails&rsquo;s alias<em>method</em>chain.</p>
-
-<hr>
-
-<p>Luckily, there&rsquo;s a way to fix that for them &ndash; dynamic module inclusion! Here, instead of directly defining methods on the class, we define them on a dynamically created anonymous module and then include that.</p>
-
-<hr>
-
-<p>This anonymous module sits within the lookup chain for us, which means that calls to super will work fine. Credit goes to the author of carrierwave for introducing me to this technique.</p>
-
-<hr>
-
-<p>If you&rsquo;re constitutionally opposed to the existence of anonymous modules, you can also name a dynamic module with const_set before inclusion.</p>
-
-<hr>
-
-<p>Dynamic module inclusion is, to be honest, probably the coolest trick I&rsquo;ve learned in the past year, so now I&rsquo;m out of things to talk about. Let&rsquo;s sum up.</p>
-
-<p>Metaprogramming is awesome because it lets us treat code as data. It lets us be cool-kid Lisp programmers without spending all day matching parentheses. We shouldn&rsquo;t be scared of it, but like all powerful tools we should treat it with the appropriate respect.</p>
-
-<p>We should make sure that in our attempts to codify patterns using metaprogramming techniques we consider our poor maintenance coders, who we will ourselves be in four months,
-and do what we can to make sure that our metaprogramming doesn&rsquo;t kill the ability to search for code, extend code, or debug code &ndash; since surely we will need to do at least one of these.</p>
-
-<p>Finally, because this is an awesome Ruby language feature, we should treat it with the joy appropriate to a language optimized for developer happiness.</p>
+<p>Anyway. The biggest takeaway I want you to have from this talk is that code is just data to Ruby, and metaprogramming is a technique like any other. Feel free to pull it out and use it, but be mindful of the fact that you are always your own maintenance coder - it&rsquo;s easy to break grep, or to damage your ability to debug or extend things later, so always metaprogram <em>carefully.</em></p>
 
 <hr>
 
 <p>Now that I&rsquo;ve said all these things, here&rsquo;s who I am and where you can find me on the Internet!</p>
 
-<p>Also, because they paid for me to come here: I work for Optoro, an e-commerce firm based in Washington, DC. We are awesome; I am only the first of four speakers we&rsquo;ve sent this year, so make sure you check out my colleagues&rsquo; talks too - tomorrow, they&rsquo;ll be speaking about numerical coercion, rewinding while debugging, and translating algorithms between Haskell and Ruby.</p>
+<p>Also: I work for Optoro. We&rsquo;re based in DC and are working to make the retail returns process greener and more efficient! We are awesome and pretty much always hiring, so if you&rsquo;re looking please talk to one of our posse. And if you know anyone who&rsquo;d make a good VP of Design, talk to me and I&rsquo;ll give you a cut of the referral bonus.</p>
 
-<p>We are currently hiring junior developers; if this description fits you, come talk to me! If it does not, please consider our online outlet Blinq.com for all your cheap laptop needs.</p>
+<p>If you&rsquo;re not looking, please consider our online outlet Blinq.com for all your cheap laptop needs.</p>
 
 <hr>
 
-<p>All cat photos used in this talk are credit Nikki Murray, who also supplied photos for my colleague Chris Hoffman&rsquo;s talk tomorrow.</p>
+<p>Ooooh. Wait. We get a bonus round.</p>
 
-<p>Questions?</p>
+<p>So, this next technique is really cool. Now that I&rsquo;ve seen Sandi Metz&rsquo;s &ldquo;Nothing is Something,&rdquo; I&rsquo;m less sure that my original use cases for this idea are good? But I promised you dynamic module inclusion, so here we go:</p>
+
+<hr>
+
+<p>Going back to the cat photo code again. Let&rsquo;s say we want to extract a generic AttachmentManager module. This is the obvious thing to do, but it has one really major problem - what happens if you don&rsquo;t like the default behavior of one of the methods that the define<em>attachment macro sets up? You can override it, but because you&rsquo;re overriding it in the <em>same</em> class, you just overwrite the previous method. This means you lose access to the default behavior, you don&rsquo;t get to use super at all. alias</em>method_chain is traditional here, but it&rsquo;s really gawky.</p>
+
+<hr>
+
+<p>So instead what we do is we dynamically create a <em>module,</em> and then include that.</p>
+
+<hr>
+
+<p>This inserts the module into the method lookup chain, which means that if you defer to super within a method it actually has a previous definition to look at.</p>
+
+<hr>
+
+<p>Anonymous modules aren&rsquo;t very polite either, though &ndash; they&rsquo;re a bit harder to debug, and they break Ruby marshalling. So it&rsquo;s better if you use const_set to give your dynamic module a name, and <em>then</em> include it.</p>
 
           </div>
 
