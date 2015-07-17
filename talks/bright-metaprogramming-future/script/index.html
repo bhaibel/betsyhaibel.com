@@ -62,21 +62,19 @@
 
 <hr>
 
-<p>First, let&rsquo;s get some consensus as to what metaprogramming is. When I was explaining my talk to my parents, I used the shortcut that a lot of people use: &ldquo;oh, it&rsquo;s code that writes code.&rdquo; There are two problems with this definition. First off, it&rsquo;s overbroad to the point of wrongness, or at best meaninglessness. Are C generators metaprogramming? What about quines? The second problem with it is that it makes your parents think you&rsquo;re building Skynet.</p>
+<p>First, let&rsquo;s get some consensus as to what metaprogramming is. When I was explaining my talk to my parents, I used the shortcut that a lot of people use: &ldquo;oh, it&rsquo;s code that writes code.&rdquo; There are two problems with this definition. First off, it&rsquo;s overbroad to the point of uselessness. The Rails generators write code, too. The second problem with it is that it makes your parents think you&rsquo;re building Skynet.</p>
 
 <hr>
 
-<p>Then there&rsquo;s the definition of metaprogramming, that, experientially, most of us actually <em>use</em> when we talk about metaprogramming. This definition, like many internalized engineering definitions, is fuzzy and handwavy and hard to pull out into the light and air, but when we as developers say &ldquo;metaprogramming&rdquo; we mostly seem to mean &ldquo;stuff that does magic and uses too few words to grep easily.&rdquo; This is also an over broad definition. It encompasses Perl.</p>
+<p>Then there&rsquo;s the definition of metaprogramming that most of us actually <em>mean.</em> This definition is more like a <em>feeling</em>, and the feeling is &ldquo;so much magic! so few variable names! I&rsquo;m scared and angry now.&rdquo; This is also overly broad; it encompasses Perl.</p>
 
 <hr>
 
-<p>Metaprogramming is instead programming that treats the structure of the program itself as a data structure to be manipulated like any other.</p>
+<p>So I like to define metaprogramming as programming that treats the structure of the program itself as a data structure to be manipulated like any other.</p>
 
 <hr>
 
-<p>The first way you can play with program structure in Ruby is using the send method. The most common in-the-wild use case for send is probably invoking private methods — Ruby&rsquo;s privacy model, like most other Ruby structures, exists to make suggestions to developers rather than bind thim.</p>
-
-<p>But, send is good for so much more.</p>
+<p>The first way you can play with program structure in Ruby is using the send method. The most common real-world use case for send is probably as a cheat to invoke private methods, but it has less evil uses too.</p>
 
 <hr>
 
@@ -90,13 +88,13 @@
 
 <p>Anyway, let&rsquo;s move on to how send can be used and misused in the wild.</p>
 
-<p>When people start pulling in &ldquo;send&rdquo; statements, usually it&rsquo;s a reaction to code that looks like this. And here I&rsquo;m reconstructing code I wrote in my first week as a Rails dev, incidentally.</p>
+<p>When people start pulling in &ldquo;send&rdquo; statements, usually it&rsquo;s a reaction to code that looks like this. Incidentally, I wrote this code for money five years ago.</p>
 
 <hr>
 
-<p>I did not like this code. It got the job done, but I didn&rsquo;t like how it got it done. I&rsquo;d trained in C and Java and Perl, so I was used to the idea that method names were these magic computer things, entirely separate from the data that the methods were acting upon. When you&rsquo;re coming from that mindset, you accept a certain amount of repetition and boilerplate as inevitable.</p>
+<p>And I hated it. It was this pile of copypasta. But I didn&rsquo;t know how to fix it. I&rsquo;d trained in Java, so I thought method names were these special immutable compiler things, and that  repetition and boilerplate were inevitable.</p>
 
-<h2>I resented the hell out of this, but I didn&rsquo;t know how to improve on it. I thought you couldn&rsquo;t. And then I learned about the magic of &ldquo;send.&rdquo;</h2>
+<h2>Then I learned that you could use &ldquo;send&rdquo; to call arbitrary methods.</h2>
 
 <p>Twenty-thirty minutes later, the code looked more like this.</p>
 
@@ -106,13 +104,13 @@
 
 <hr>
 
-<p>This is what we talk about when we say Ruby optimizes for &ldquo;developer happiness.&rdquo; I <em>hated</em> that code, and a Ruby feature let me make the ugly bits go away.</p>
+<p>This is what we talk about when we say Ruby optimizes for &ldquo;developer happiness.&rdquo; I <em>hated</em> that code, and Ruby&rsquo;s dynamism made the repetition go away.</p>
 
-<p>Unfortunately, now I had a really big hammer &ndash; metaprogramming &ndash; and every problem started to look like a nail.</p>
+<p>Unfortunately, now I had a really big hammer &ndash; send &ndash; and every problem started to look like a nail.</p>
 
 <hr>
 
-<p>This next code is an amalgam of code I wrote and code that I&rsquo;ve seen other people write that I <em>could well</em> have written during this part of my programming career. Names have been changed to protect the guilty.</p>
+<p>This next code is an amalgam of code I wrote and code that I&rsquo;ve seen other people write that I <em>could well</em> have written during this part of my programming career.</p>
 
 <hr>
 
@@ -124,13 +122,11 @@
 
 <hr>
 
-<p>Nearly as bad is the fact that using a dynamic method call to reduce repetition at the call site often spackles over a far uglier repetition elsewhere in the code, which has happened here. Let&rsquo;s fix it!</p>
-
-<p>Now, this is a refactoring in which things are going to get uglier before they get prettier, but eventually things are gonna clear up here.</p>
+<p>Finally, using a dynamic method call to reduce repetition at the call site often spackles over a far uglier repetition elsewhere in the code. How do we refactor away from this when it happens?</p>
 
 <hr>
 
-<p>The first thing we do is change the method signature up a little. When you do a dynamic method call, you cheat message-passing a little by sending multiple pieces of data in with the method-name argument. Here, these multiple pieces of data are the abstract &ldquo;format stuff for stuff&rdquo; method name structure, the garment, and the user type. So, one of the first things we can do is make a new method signature that makes the implicit arguments &ldquo;garment&rdquo; and &ldquo;user_type&rdquo; explicit arguments instead. The quickest way to do this is move the send call into Formatter, which also isolates it within its class and makes it a bit easier to understand in context.</p>
+<p>Well, the first thing we do is change the method signature up a little. When you do a dynamic method call, you cheat message-passing a little by sending multiple pieces of data in with the method-name argument. Here, these multiple pieces of data are the abstract &ldquo;format stuff for stuff&rdquo; method name structure, the garment, and the user type. So, one of the first things we can do is make a new method signature that makes the implicit arguments &ldquo;garment&rdquo; and &ldquo;user_type&rdquo; explicit arguments instead. The quickest way to do this is move the send call into Formatter, which also isolates it within its class and makes it a bit easier to understand in context.</p>
 
 <hr>
 
@@ -174,11 +170,11 @@
 
 <hr>
 
-<p>If you hate const_get, you can also get the equivalent effect by using a hash to store explicit class names, but for the most part I think that&rsquo;s overkill.</p>
+<p>If you hate const_get, you can also get the equivalent effect by using a hash to store explicit class names.</p>
 
 <hr>
 
-<p>We&rsquo;re not fully getting away from dynamism here - we&rsquo;re just choosing which class to instantiate dynamically, instead of which method to invoke. But now the dynamism is encapsulated within a single file and a single family of classes, so its effect on the complexity and searchability of the entire application is significantly reduced. And Ruby&rsquo;s capacity for dynamism is one of the best things about the language &ndash; look at how concise and pretty that const_get call is! Think about how many lines you would need to write to do the same thing in a less dynamic language! And the more code there is on the screen, the more code you need to keep in your head.</p>
+<p>We&rsquo;re not fully getting away from dynamism here - we&rsquo;re just choosing which class to instantiate dynamically, instead of which method to invoke. But now the dynamism is encapsulated within a single file and a single family of classes, so its effect on the complexity and searchability of the entire application is significantly reduced. And Ruby&rsquo;s capacity for dynamism is one of the best things about the language &ndash; look at how concise that const_get call is! Think about how many lines you would need to write to do the same thing in a less dynamic language! And the more code there is on the screen, the more code you need to keep in your head.</p>
 
 <hr>
 
@@ -190,7 +186,7 @@
 
 <hr>
 
-<p>In order to explain how method_missing works, we need to examine Ruby&rsquo;s default lookup chain. When you send a bag of arguments to an object, Ruby first looks at the object itself, or rather at its eigenclass, to see if any singleton methods have been defined that match the sent method name.</p>
+<p>In order to explain how method_missing works, we need to examine Ruby&rsquo;s default lookup chain. When you send a bag of arguments to an object, Ruby first looks at the object&rsquo;s eigenclass, which is a little psuedo-class each individual object carries with it, to see if any singleton methods have been defined that match the sent method name.</p>
 
 <hr>
 
@@ -230,9 +226,9 @@
 
 <hr>
 
-<p>So, in the wild, method<em>missing looks a little like this. This is an oversimplification of how ActiveRecord uses it, but this is the general shape of it. method</em>missing gets passed the bag of arguments that you sent the object and decides what to do based on them.</p>
+<p>So, in the wild, method<em>missing looks a little like this. This oversimplifies how actual ActiveRecord looks, but this is the general shape of it. method</em>missing gets passed the bag of arguments that you sent the object and decides what to do based on them.</p>
 
-<p>This oversimplified version of it that I&rsquo;m showing here is making two really common mistakes with the use of method_missing.</p>
+<p>Most method<em>missing implementations are this simple, which unfortunately means they make two small mistakes. With the use of method</em>missing.</p>
 
 <hr>
 
@@ -252,9 +248,9 @@
 
 <hr>
 
-<p>Now for a subtler mistake you can make in and around method_missing. This is one I made about a year ago - if any of my old colleages from LearnZillion are watching this, I&rsquo;m <em>really sorry.</em></p>
+<p>Now for a subtler mistake that I&rsquo;ve made with method_missing.</p>
 
-<p>So, let&rsquo;s say you have a mixin that relies on the breed_codes method being defined on an object.</p>
+<p>So, let&rsquo;s say you have a mixin that relies on the breed_codes method being defined on an object, and you throw in a NotImplementedError to make that reliance really clear.</p>
 
 <hr>
 
@@ -278,7 +274,7 @@
 
 <hr>
 
-<p>This is what I did at LZ. Please don&rsquo;t do this. It means that poor HasBreeds, or whatever, will unfairly become a part of every single debugging session when you typo a method name, since its method_missing call will be an attractively late part of the backtrace.</p>
+<p>This is what I did at first. It made the mistake even worse: now, whenever someone made a typo, this method_missing would be part of the error. They&rsquo;d spend an hour puzzling over how an eleven-line file could have so many issues, and then they&rsquo;d get mad at me for the confusing error message.</p>
 
 <hr>
 
@@ -290,7 +286,7 @@
 
 <hr>
 
-<p>You can also do this, which is a little more explicit and stays within the mixin. Or you can get rid of the debugging convenience of the NotImplementedError.</p>
+<p>You can also do this, which is a little more explicit and stays within the mixin. Or you can get rid of the quote-unquote convenience of the NotImplementedError.</p>
 
 <p>But the fact that all of these are even questions illuminates some of the hidden costs of making a method_missing-driven dynamic interface &ndash; it doesn&rsquo;t play nicely with strategies for good object-oriented design in Ruby, and so defaulting to it when you want easy dynamism makes your code far less extensible later.</p>
 
@@ -300,7 +296,7 @@
 
 <hr>
 
-<p>But, honestly, I&rsquo;d argue that none of those are actually good uses - pretty dynamic DSLs are usually better expressed with options hashes than method names, you can use OpenStruct for extensible config objects, and Ruby has a nice built-in delegator class. Some of these use method_missing under the hood, but it&rsquo;s hidden under a nice well-maintained and well-understood interface, which isn&rsquo;t necessarily true of a more homegrown solution.</p>
+<p>But, honestly, I&rsquo;d argue that none of those are actually good uses. Changeable method names in DSLs fall into the &ldquo;isn&rsquo;t this another parameter?&rdquo; trap that our send calls earlier fell into, so I like options hashes better for those. For everything else, there&rsquo;s OpenStruct, and SimpleDelegator, and Forwardable. Some of these use method_missing under the hood, but it&rsquo;s hidden under a nice well-maintained and well-understood interface. That&rsquo;s usually not true of homegrown solutions.</p>
 
 <hr>
 
@@ -318,21 +314,21 @@
 
 <p>define_method lets us pull it out into a an each block. This cuts lines, and more importantly illuminates the deeper structure of the code.</p>
 
-<p>Again, this is really clear <em>at a small scale.</em> But if you&rsquo;re doing it on a larger scale - say, if you want to extract this code to anything - consider putting it in a class!</p>
+<p>Again, this is really clear <em>at a small scale.</em> We can see all the pieces, so we don&rsquo;t need to encapsulate the dynamism. If it grew, we&rsquo;d want to either encapsulate or replace the dynamism by extracting a class.</p>
 
 <hr>
 
-<p>Boring, I know. But if you&rsquo;re reading someone else&rsquo;s code, do you want it to be boring or clever? Think about giving them the same courtesy.</p>
+<p>Boring, I know. But if you&rsquo;re reading code, do you want it to be clever, or boring?</p>
 
 <hr>
 
-<p>Anyway. The biggest takeaway I want you to have from this talk is that code is just data to Ruby, and metaprogramming is a technique like any other. Feel free to pull it out and use it, but be mindful of the fact that you are always your own maintenance coder - it&rsquo;s easy to break grep, or to damage your ability to debug or extend things later, so always metaprogram <em>carefully.</em></p>
+<p>Anyway. The biggest takeaway I want you to have from this talk is that code is just data to Ruby, and metaprogramming is a technique like any other. Feel free to pull it out and use it, but be mindful of the fact that you are always your own maintenance coder - it&rsquo;s easy to break grep, or to damage your ability to debug or extend things later, so always metaprogram <em>carefully.</em> Also, always ask yourself if something is really part of the method <em>name,</em> or if it&rsquo;s just another parameter.</p>
 
 <hr>
 
 <p>Now that I&rsquo;ve said all these things, here&rsquo;s who I am and where you can find me on the Internet!</p>
 
-<p>Also: I work for Optoro. We&rsquo;re based in DC and are working to make the retail returns process greener and more efficient! We are awesome and pretty much always hiring, so if you&rsquo;re looking please talk to one of our posse. And if you know anyone who&rsquo;d make a good VP of Design, talk to me and I&rsquo;ll give you a cut of the referral bonus.</p>
+<p>Also: I work for Optoro. We&rsquo;re based in DC and are working to make the retail returns process greener and more efficient! We are always hiring.</p>
 
 <p>If you&rsquo;re not looking, please consider our online outlet Blinq.com for all your cheap laptop needs.</p>
 
@@ -340,7 +336,7 @@
 
 <p>Ooooh. Wait. We get a bonus round.</p>
 
-<p>So, this next technique is really cool. Now that I&rsquo;ve seen Sandi Metz&rsquo;s &ldquo;Nothing is Something,&rdquo; I&rsquo;m less sure that my original use cases for this idea are good? But I promised you dynamic module inclusion, so here we go:</p>
+<p>Now I&rsquo;m gonna show you how carrierwave works.</p>
 
 <hr>
 
