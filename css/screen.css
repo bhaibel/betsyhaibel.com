@@ -15,7 +15,7 @@
   padding-right: 1em;
   margin-left: auto;
   margin-right: auto; }
-  /* line 38, /Users/elhaibel/.rvm/gems/ruby-2.1.1/gems/compass-core-1.0.1/stylesheets/compass/utilities/general/_clearfix.scss */
+  /* line 38, /Users/elhaibel/.gem/ruby/2.1.1/gems/compass-core-1.0.1/stylesheets/compass/utilities/general/_clearfix.scss */
   .container:after {
     content: "";
     display: table;
@@ -164,7 +164,7 @@ body {
 /* line 171, /Users/elhaibel/code/open/betsyhaibel.com/source/css/screen.scss */
 .container {
   background-color: #fff;
-  background-color: rgba(255, 255, 255, 0.7); }
+  background-color: rgba(255, 255, 255, 0.85); }
 
 /* line 176, /Users/elhaibel/code/open/betsyhaibel.com/source/css/screen.scss */
 pre {

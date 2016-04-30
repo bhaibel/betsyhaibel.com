@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Haskell, Vectors, and Implicit Knowledge</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+        <link rel="stylesheet" href="/css/normalize.css">
+        <link rel="stylesheet" href="/css/screen.css">
+        <link rel="stylesheet" href="/css/pygments.css">
+
+        <script src="js/vendor/modernizr-2.6.1.min.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52442215-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+    </head>
+    <body class='' >
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+        <div class="container">
+            <header>
+                <h1> Betsy Haibel has an Online Presence</h1>
+            </header>
+
+            <nav>
+              <ul>
+                <li>
+                  <a href="/writing">Writing</a>
+                </li>
+                <li>
+                  <a href="https://github.com/bhaibel">Code</a>
+                </li>
+                <li>
+                  <a href="https://twitter.com/betsythemuffin">Twitter</a>
+                </li>
+                <li>
+                  <a href="/resume">Resume</a>
+                </li>
+              </ul>
+            </nav>
+
+          <div class="content">
+            <p>This winter I was teaching myself Haskell.</p>
+
+<p>I&rsquo;d tried before, with everyone&rsquo;s darling <em>Learn You a Haskell for Great Good</em>. My old boss had compared its &ldquo;offbeat&rdquo; approach to <em>_why&rsquo;s Poignant Guide to Ruby</em>, which I love. Both have an informal tone, but the similarities stop there: where the Poignant Guide has adorable cartoon foxes, <em>Learn You a Haskell</em> has upsetting bro humor. I think I snapped at one of the (many) fat jokes.</p>
+
+<p>This time around I tried <em>Real World Haskell</em>, and at first things went much better. The material was more usefully organized, and the examples and exercises better suited to my learning style.
+Then I came to The Problem.</p>
+
+<h2>The Problem</h2>
+
+<p>The problem set at the end of Real World Haskell’s third chapter contains the following sequence:</p>
+
+<blockquote>
+<ol>
+<li>Consider three two-dimensional points a, b, and c. If we look at the angle formed by the line segment from a to b and the line segment from b to c, it either turns left, turns right, or forms a straight line. Define a Direction data type that lets you represent these possibilities.</li>
+<li>Write a function that calculates the turn made by three 2D points and returns a Direction.</li>
+<li>Define a function that takes a list of 2D points and computes the direction of each successive triple. Given a list of points [a,b,c,d,e], it should begin by computing the turn made by [a,b,c], then the turn made by [b,c,d], then [c,d,e]. Your function should return a list of Direction.</li>
+<li>Using the code from the preceding three exercises, implement Graham&rsquo;s scan algorithm for the convex hull of a set of 2D points. You can find good description of what a convex hull is, and how the Graham scan algorithm should work, on Wikipedia.</li>
+</ol>
+</blockquote>
+
+<p>Problem 9 was pretty simple:</p>
+<pre><code class="highlight haskell"><span class="kr">data</span> <span class="kt">Direction</span> <span class="o">=</span> <span class="kt">Left</span> <span class="o">|</span> <span class="kt">Right</span> <span class="o">|</span> <span class="kt">Straight</span>
+</code></pre>
+
+<p>Problem 10 took me a month.</p>
+
+<p>I figured it had to be simple; if it were a difficult geometry problem, it wouldn’t be in a beginners&rsquo; Haskell book, it would be in a &ldquo;Haskell as applied to tricky math&rdquo; book. But approach after approach after approach failed me. I compared slopes. I tried complicated conditionals based on what quadrant each line was in when its base was set at origin.</p>
+
+<p>Did you know that Haskell has two <code>Data.Vector</code> modules? There&rsquo;s one in the standard library that deals with Vectors like the array-like CS concept. There&rsquo;s one on Hackage that deals with Vectors like the geometry and second-year algebra concept. They are called the same thing. I know this now, because I found the docs for the latter, imported <code>Data.Vector</code> like a good girl, and spent aeons of subjective time banging my head against arity mismatch errors before giving up on a dot-product-based solution.</p>
+
+<p>Eventually I finally hammered out all of the special cases.</p>
+
+<p>I’d been pushing myself to finish, rather than cutting my losses and moving on in the book, because I figured it would feel good when I finally did. It didn’t. I just felt stupid, because it had taken me a month to figure out what the authors of the book had clearly expected to be simple.</p>
+
+<p>I moved on to Problem 12. Looked up the Graham Scan algorithm on Wikipedia, as ordered. </p>
+
+<blockquote>
+<p>Again, determining whether three points constitute a &ldquo;left turn&rdquo; or a &ldquo;right turn&rdquo; does not require computing the actual angle between the two line segments, and can actually be achieved with simple arithmetic only. For three points <img alt="p1=(x1,y1)" src="https://upload.wikimedia.org/math/e/3/8/e38e464b2ad39be72af38cacc8fc17de.png" />, <img alt="p1=(x2,y2)" src="https://upload.wikimedia.org/math/a/4/5/a45267c35535663e45d3a0bcc4db16e6.png" /> and <img alt="p1=(x3,y3)" src="https://upload.wikimedia.org/math/b/d/b/bdb6d1f831105c159498d203a95c41fb.png" />, simply compute the z-coordinate of the cross product of the two vectors <img alt="p1p2" src="https://upload.wikimedia.org/math/a/c/7/ac7a0fe21575792e379eb1caa37d5224.png" /> and <img alt="p1p3" src="https://upload.wikimedia.org/math/2/b/5/2b5ba9e273a2f3c0de10b0a07125bd86.png" />, which is given by the expression <img alt="(x2 - x1)(y3 - y1) - (y2 - y1)(x3 - x1)" src="https://upload.wikimedia.org/math/4/4/d/44dac4ebbcdd18ed0593418004b5e4c8.png" />. If the result is 0, the points are collinear; if it is positive, the three points constitute a &ldquo;left turn&rdquo; or counter-clockwise orientation, otherwise a &ldquo;right turn&rdquo; or clockwise orientation (for counter-clockwise numbered points).</p>
+</blockquote>
+
+<p>Reader, I saw fire.</p>
+
+<p>At first I was angry at myself, because there had been a straightforward answer and &lsquo;’d &ldquo;just been too stupid&rdquo; to get it. Then I was angry at the authors for not putting that &ldquo;simple arithmetic&rdquo; answer in the text for problem 10. Then I was furious at the authors — because I realized why they hadn&rsquo;t.</p>
+
+<p>They thought it was too simple to explain. They thought that anyone learning Haskell would have retained all the random topics that are contained in high school precalculus. They thought that anyone learning Haskell would be the Kind Of Person who just &ldquo;naturally&rdquo; remembers that sort of stuff.</p>
+
+<p>And now, because it&rsquo;s a woman writing this, you&rsquo;re probably assuming that this is a rant about how you don&rsquo;t need to know math to computer.</p>
+
+<p>Think again. I am That Kind Of Person. I started programming at either twelve or eight, depending on whether you count HyperCard. I learned Scheme in ninth grade. I am That Kind of Person, and the problem still made me feel like a fucking idiot. Like an impostor. Like I ought to just give up.</p>
+
+<p>Over whether I could remember offhand that vector cross products were not commutative, and what implications this had for turn direction problems.</p>
+
+<p>This could be a rant about the arrogance of the functional programming ivory tower. But a lot of people have made that rant already, and I&rsquo;m more interested in self-reflection than in being yet another Ruby programmer who’s snotty about non-Rubyists.</p>
+
+<h2>Closer to Home</h2>
+
+<p>I teach people to program in my free time. I co-organize a drop-in group called Learn Ruby in DC, so every other week I walk people of all different skill levels through how to code. This includes honest-to-god raw beginners, as well as apprentices and juniors.</p>
+
+<p>There is one understanding gap that every single one of them runs into at some point. They mix up local variables and instance variables, or variables and strings, or ivars and symbols — the exact mixup doesn&rsquo;t matter. They respond by randomly adding and subtracting <code>@</code>s and colons and quotation marks until it works, and then they sigh relief. This happens because they don’t have mental scaffolding for the differences between variables and symbols, between locals and ivars — to them, they’re just words that may or may not have magic before them, and so you fiddle with the magic until it runs.</p>
+
+<p>It always takes me a few minutes of observation to figure out that that&rsquo;s what&rsquo;s happening in their heads. I’ve been writing Ruby since 2008; the scope differences between raw ivars and accessors and local variables are like breathing now. My intuitive brain assumes that everyone knows this, and I need to back up and remind it that that’s not true.</p>
+
+<p>I need to do this even though in 2008, as a woman who’d worked with various conventional languages for 8 years, I&rsquo;d struggled like hell to internalize that difference myself.</p>
+
+<p>Am I making my students feel stupid? I hope not, but… sometimes I probably am.</p>
+
+<h2>Where do we go?</h2>
+
+<p>The educational materials we create encode our values &ndash; often accidentally. <em>_why&rsquo;s Poignant Guide</em> reflects an ethos where programming is a joyful, creative activity. <em>Learn You a Haskell</em> conveys a worldview that fat jokes are hilarious fun. <em>Real World Haskell</em> assumes that all truly educated people remember vector-math intricacies off the top of their heads.</p>
+
+<p>The values of our educational materials create our community values. People whose assumptions mesh with theirs proceed onward to community participation; people whose assumptions and values don&rsquo;t leak out of the pipeline. I think Haskell is a really pretty language, but I can&rsquo;t tell if the Haskell community wants me.</p>
+
+<p>It’s human to forget that knowledge one has internalized is not common knowledge. It&rsquo;s human to be a poor teacher. It&rsquo;s human to confuse students; to make them feel terrible. It&rsquo;s still cruel. And when we encode that cruelty into our educational materials &ndash; however accidentally &ndash; we turn surviving that cruelty into something we value above all.</p>
+
+<p>What implicit knowledge is needed in your language of choice? How do you deal with that around juniors?</p>
+
+          </div>
+
+          <footer>
+            <p>&copy; 2016 Betsy Haibel
+            </p>
+          </footer>
+<script src="//static.getclicky.com/js" type="text/javascript"></script>
+<script type="text/javascript">try{ clicky.init(100750202); }catch(e){}</script>
+    </body>
+</html>
