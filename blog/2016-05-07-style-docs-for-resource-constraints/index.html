@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Betsy Haibel Has an Online Presence</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+        <link rel="stylesheet" href="/css/normalize.css">
+        <link rel="stylesheet" href="/css/screen.css">
+        <link rel="stylesheet" href="/css/pygments.css">
+
+        <script src="js/vendor/modernizr-2.6.1.min.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52442215-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+    </head>
+    <body class='' >
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+        <div class="container">
+            <header>
+                <h1> Betsy Haibel has an Online Presence</h1>
+            </header>
+
+            <nav>
+              <ul>
+                <li>
+                  <a href="/writing">Writing</a>
+                </li>
+                <li>
+                  <a href="https://github.com/bhaibel">Code</a>
+                </li>
+                <li>
+                  <a href="https://twitter.com/betsythemuffin">Twitter</a>
+                </li>
+                <li>
+                  <a href="/resume">Resume</a>
+                </li>
+              </ul>
+            </nav>
+
+          <div class="content">
+            <p>Rough transcript of a talk given at RailsConf 2016.</p>
+
+<p>Let&rsquo;s talk about efficient ways to write styleguides in resource-constrained environments. Because, realistically, most of us don&rsquo;t have a dedicated month to sink into one.</p>
+
+<p>To get anything done under resource constraints, you need to follow these approximate steps:</p>
+
+<ol>
+<li>Have a vision of where you want to go</li>
+<li>Figure out baby steps that will get you there</li>
+<li>&hellip;make those steps smaller</li>
+<li>&hellip;and adaptable to changing circumstances</li>
+<li>&hellip;and recognize that the finished product will resemble but not match your vision</li>
+<li>Then go do the thing!</li>
+</ol>
+
+<p>Styleguides are no different.</p>
+
+<p>First up: the vision.</p>
+
+<p>Here&rsquo;s a screenshot of the draft US Web Design Standards, as put out by 18F &ndash; they&rsquo;re the most complete public style guide that I know of. </p>
+
+<p>You&rsquo;ve got a set of components, a description of what they&rsquo;re good for, and documentation for how to create them to spec in your day-to-day work. Good styleguides, and the component libraries you might create to back them, are all about organizing the view layer and communicating about it. Specifically, they organize and document the user interface domain within the view layer.</p>
+
+<p>We talk a lot about getting people on the same page where the business domain is concerned &ndash; the phrase Eric Evans uses in the brilliant <em>Domain-Driven Design</em> is &ldquo;shared ubiquitous language.&rdquo; That&rsquo;s important. But when we&rsquo;re building a front-end, there are always <em>two</em> domains to contend with &ndash; the business domain and the user interface domain. Every user interface has its own internal logic. Web development distributes this logic through several layers of code &ndash; HTML, CSS, and Javascript all have their own independent purposes. This is hard to keep organized, and so you <em>need</em> a &ldquo;shared ubiquitous language&rdquo; for the UI domain. Style guides provide one.</p>
+
+<p>Funny thing: you already have a shared language for your UI domain. It&rsquo;s just accidental, and may not be ubiquitous. Every line of front-end code you write reflects your assumptions about how the UI should work. Most of the forms in your Rails app probably follow approximately the same code conventions and have the same look and feel. This was probably achieved with a lot of copypasta. And in that world, your existing code is the accidental style guide for the rest of your app.</p>
+
+<p>So, why document it? If our documentation is our working code, isn&rsquo;t that super agile? For simple business logic, you can limp along with calling your test suite your documentation.</p>
+
+<p>This falls apart once you hit the UI domain. Rails has fewer and weaker opinions about how you organize it, which means that you can&rsquo;t lean as much on convention when reading unfamiliar code. This results in a process that has a lot of copy-paste, trial-and-error, and generally a lot of fearful coding by magic spell. Formal documentation helps people sort through what&rsquo;s relevant and what&rsquo;s not, leading to less fear, less cruft and better velocity.</p>
+
+<p>Also, &ldquo;just read the code&rdquo; falls apart if you have a designer who&rsquo;s focused on designing things over learning Rails.</p>
+
+<p>To get at the shared language that&rsquo;s <em>specific</em> to our user interface, we need to excise most business-domain concepts from it. This screenshot here, from a pet photo sharing website, displays a thumbnail with metadata about individual photos. It&rsquo;s not a cat photo module. We can&rsquo;t name it that for two reasons:</p>
+
+<ul>
+<li>The designer might want to reuse the visual language developed here to showcase other site elements, like dog photos.</li>
+<li>There are probably other ways we&rsquo;re presenting cat photos in the user interface.</li>
+</ul>
+
+<p>When we&rsquo;re talking about the business domain of the application, this screenshot clearly displays a bunch of cats. But when we&rsquo;re talking about the user interface domain, what we&rsquo;re looking at should be called something like a &ldquo;showcase,&rdquo; or a &ldquo;card,&rdquo; just like this is a &ldquo;carousel&rdquo; not a &ldquo;grouped pattern display&rdquo;.</p>
+
+<p>This goes a little deeper than the site branding. That&rsquo;s also a good candidate for inclusion in a style guide, but a lot of people start and stop with the branding guidelines. When you do that, you limit the usefulness of your style guide. They can help with so many more things.</p>
+
+<p>They can talk about the specific look and feel of individual widgets. This tends to be as much or more about the affordances of specific components, and other prosaic UI concerns, as it is about their aesthetics.</p>
+
+<p>They can talk about how they&rsquo;re arranged &ndash; are the labels next to the form fields or on top of them? Where do error messages go?</p>
+
+<p>They can also talk about what UI problems a given widget is appropriate for solving &ndash; &ldquo;use a grid if you have just one set of cards on a page; use carousels to scale up&rdquo; or &ldquo;only display notification boxes that relate to the user&rsquo;s current goal.&rdquo;</p>
+
+<p>This looks a lot like the Bootstrap documentation, or whatever your favorite markup library is like. So it makes sense that the objection I always get is &ldquo;oh, we just use Bootstrap, why bother with all that stuff.&rdquo;</p>
+
+<p>&ldquo;Just&rdquo; is a funny word in software development, and it&rsquo;s generally a marker for someone trying to push their assumptions on you without realizing it. None of the people who&rsquo;ve said this to me were &ldquo;just&rdquo; using Bootstrap.</p>
+
+<p>If you think your shop &ldquo;just&rdquo; uses Bootstrap, and that that&rsquo;s sufficient, I&rsquo;d like you to ask yourselves:</p>
+
+<ul>
+<li>Are you using all of Bootstrap, or just a subset?</li>
+<li>Are you only ever using Bootstrap, or do you have custom UI elements that aren&rsquo;t part of it?</li>
+<li>Do you have undocumented rules around how you&rsquo;re using the Bootstrap elements?</li>
+<li>Do you often copypasta markup around to preserve those undocumented rules?</li>
+</ul>
+
+<p>If any of those statements are true, then your accidental styleguide is <em>not</em> the same as the Bootstrap documentation, and I&rsquo;d like to encourage you to document what it actually is. It&rsquo;s totally okay to cheat by liberally saying &ldquo;further explanation at this URL&rdquo; or just copy-pasting in large swathes of their docs. But it&rsquo;s important to establish what you do use of Bootstrap, what you don&rsquo;t use, what else you use, and how you use all of it.</p>
+
+<p>There are, however, a few much more valid barriers to styleguide adoption:</p>
+
+<ul>
+<li>They&rsquo;re a lot of work.</li>
+<li>They can be hard to sell to your boss and teammates.</li>
+<li>If you&rsquo;re inflexible when building one, it hinders instead of helps.</li>
+<li>Your designer may not want their creativity thus restrained.</li>
+<li>All documentation risks turning into dead documentation.</li>
+</ul>
+
+<p>We live in the real world and work on software that is held together with love and duct tape.</p>
+
+<p>I say &ldquo;we&rdquo; for a reason. Because I am, like you, a veteran of the &ldquo;we can always clean up tomorrow&rdquo; school of agile that I can promise you that there are ways to incrementally refactor towards this bright shiny dream world.</p>
+
+<p>The first thing we need to do is let go of the idea that a styleguide is ever going to be done. It&rsquo;s been fifteen years since the Agile Manifesto — we have all joyfully embraced the notion that our software is iteratively built and never quite finished. It therefore follows that our documentation, like the code it mirrors, must also be malleable and responsive to changing needs. I&rsquo;ve worked with a styleguide before that was beautiful and perfect like the 18F styleguide and it was wonderful. For about five months. And then our old designer left and we got a new designer He reworked things. And he produced this beautiful new style guide. And then we had to migrate towards it. Do you know what we weren&rsquo;t doing then? Shipping. But when we view these things as perfect versus worthless, we stop doing iterative processes &ndash; even the history of our industry has proven time and time again that iterative processes deliver the most value per unit time.</p>
+
+<p>Have you ever written brownfield tests for un-covered or under-covered features? It was painful, yeah? But you did it anyway because you knew you were supposed to and it would feel good when it stopped.</p>
+
+<p>How did you do it? Chances are you picked either one UI path and wrote an integration test for it, or you picked one method in one class and started writing unit tests for all of its cases. Probably you did this for a feature you were working on anyway at the time. Chances are it sucked. Since you were trying to maintain some kind of velocity on your feature, you didn&rsquo;t take time to build out proper, serious test infrastructure &ndash; instead you focused on a minimum viable test harness. The next set of brownfield tests you wrote, you already had that minimum viable test harness in place, so they were easier &ndash; maybe you even fleshed out your testing infrastructure a little. And then the next tests after that were easier still. Eventually it got easy.</p>
+
+<p>Like that brownfield testing process, managing brownfield styleguide documentation so that it becomes slow and iterative allows us to sidestep many of the valid concerns about styleguides as a stop-the-world project.</p>
+
+<p>It forces us to figure out a set of baby steps that lets us maintain velocity. It forces us to make things better with every little baby step, so that we can convince our teammates and bosses that this is worth doing. And it forces us, right away, to grapple with the dead documentation problem.</p>
+
+<p>If someone did a stop-the-world doc project that was released on April 27, 2014, then I know coming in to the project that it <em>was</em> relevant then. And I can adjust my mental model of how accurate it is based on code entropy. So if I&rsquo;m coming to that project circa May 2016, I know that maybe the DB tables are mostly the same but the controllers might be entirely different.</p>
+
+<p>But if I have bits and bobs of documentation that <em>don&rsquo;t</em> have dates on them, once I hit one inaccurate piece I&rsquo;m forced to distrust the whole thing. I can&rsquo;t make the same value-preserving guesswork. So if we&rsquo;re doing baby-steps documentation, we need to come up with tricks to keep it up to date easily.</p>
+
+<p>Baby steps also solve the flexibility problem. When we document what we&rsquo;ve already got, in tiny little pieces, then we know that our styleguide covers real-world use cases.</p>
+
+<p>The overall strategy we&rsquo;re going to follow for this has three phases that we&rsquo;re gonna repeat over and over:</p>
+
+<ol>
+<li>Identify a UI component</li>
+<li>Codify it</li>
+<li>Document it</li>
+</ol>
+
+<h3>Step 1: Identify</h3>
+
+<p>Step 1, identify, is pretty easy. Just look at your app.</p>
+
+<p>Look at these two screens side by side. They&rsquo;ve both got groups of Cards in them, and also Tab Sets.</p>
+
+<h3>Step 2: Codify</h3>
+
+<p>Next, we try to formalize these components in code. Refactoring what you&rsquo;ve already got to be more internally consistent sets you up to document it later. Also, even if you&rsquo;re having trouble selling your team on styleguides, it&rsquo;s pretty easy to sell people on five-line code cleanup. If you make it part of your process, it builds trust.</p>
+
+<p>Here&rsquo;s the existing code for tab sets:</p>
+<pre><code class="highlight erb"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">'tabs'</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">'tab</span><span class="cp">&lt;%=</span> <span class="n">current_page?</span><span class="p">(</span><span class="n">cats_path</span><span class="p">)</span> <span class="p">?</span> <span class="s1">' active'</span> <span class="p">:</span> <span class="s1">''</span> <span class="cp">%&gt;</span><span class="s">'</span><span class="nt">&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">link_to_unless_current</span> <span class="s1">'Cats'</span><span class="p">,</span> <span class="n">cats_path</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">'tab</span><span class="cp">&lt;%=</span> <span class="n">current_page?</span><span class="p">(</span><span class="n">dogs_path</span><span class="p">)</span> <span class="p">?</span> <span class="s1">' active'</span> <span class="p">:</span> <span class="s1">''</span> <span class="cp">%&gt;</span><span class="s">'</span><span class="nt">&gt;</span>
+    <span class="cp">&lt;%=</span> <span class="n">link_to_unless_current</span> <span class="s1">'Dogs'</span><span class="p">,</span> <span class="n">dogs_path</span> <span class="cp">%&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+</code></pre>
+<pre><code class="highlight ruby"><span class="k">module</span> <span class="nn">ComponentHelper</span>
+  <span class="c1"># &lt;li class='tab [active]'&gt;</span>
+  <span class="c1">#    &lt;a href='[href]'&gt;[name]&lt;/a&gt;</span>
+  <span class="c1"># &lt;/li&gt;</span>
+  <span class="k">def</span> <span class="nf">tab</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">href</span><span class="p">)</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="n">current_page?</span><span class="p">(</span><span class="n">href</span><span class="p">)</span> <span class="p">?</span> <span class="s1">'tab active'</span> <span class="p">:</span> <span class="s1">'tab'</span>
+    <span class="n">content_tag</span><span class="p">(</span><span class="s1">'li'</span><span class="p">,</span> <span class="ss">class: </span><span class="n">classes</span><span class="p">)</span> <span class="k">do</span>
+      <span class="n">link_to_unless_current</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">href</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>Tabs are the most obvious repeated component here, so we move them into a helper. Note that I&rsquo;m putting the output HTML in a comment above the method name. This makes reading the method quickly easier, by giving you a literal representation of its output. It also helps orient your designer if they&rsquo;re a designer-dev, and helps you search for code more easily in large projects.</p>
+
+<p>Now that we&rsquo;ve got that, we update the view:</p>
+<pre><code class="highlight erb"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">'tabs'</span><span class="nt">&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">tab</span><span class="p">(</span><span class="s1">'Cats'</span><span class="p">,</span> <span class="n">cats_path</span><span class="p">)</span> <span class="cp">%&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">tab</span><span class="p">(</span><span class="s1">'Dogs'</span><span class="p">,</span> <span class="n">dogs_path</span><span class="p">)</span> <span class="cp">%&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+</code></pre>
+
+<p>But what if your code looks more like this?</p>
+<pre><code class="highlight erb"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">'tabs tabs-left span7 big-text red maybe-use-cool-font'</span><span class="nt">&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">tab</span><span class="p">(</span><span class="s1">'Cats'</span><span class="p">,</span> <span class="n">cats_path</span><span class="p">)</span> <span class="cp">%&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">tab</span><span class="p">(</span><span class="s1">'Dogs'</span><span class="p">,</span> <span class="n">dogs_path</span><span class="p">)</span> <span class="cp">%&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+</code></pre>
+
+<p>Five-years-ago Front-end snob Betsy would have sneered at this for being presentational markup. But she was wrong. Markup frameworks like Bootstrap and Foundation, or hand-rolled systems, are great for rapid prototyping, and you don&rsquo;t always have time to clean up a prototype later.</p>
+<pre><code class="highlight html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">'tabs tabs-left span7 big-text red maybe-cool-font'</span><span class="nt">&gt;&lt;/ul&gt;</span>
+
+<span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">'tabs tabs--primary'</span><span class="nt">&gt;</span>                               <span class="nt">&lt;/ul&gt;</span>
+</code></pre>
+
+<p>Also, the &ldquo;semantic vs presentational&rdquo; nerdfight obscures the real difference between these two examples. The first one is a collection of attributes. The second one is a meaningful abstraction that collects those attributes and abstracts them in a way that builds understanding.</p>
+
+<p>So how do we get there? We cheat. This cheat is great even if you&rsquo;re not confident about front-end.</p>
+<pre><code class="highlight scss"><span class="nv">%span5</span> <span class="p">{</span>
+  <span class="nl">width</span><span class="p">:</span> <span class="m">48%</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.nav--primary</span> <span class="p">{</span>
+  <span class="k">@extend</span> <span class="nt">span5</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>If you&rsquo;re using Rails, you probably already have SCSS installed. SCSS gives us a few different options &ndash; mixins, placeholders, and class extends &ndash; that we can use to include existing CSS classes into new ones, much like Ruby modules. (For an overview of their differences: http://krasimirtsonev.com/blog/article/SASS-mixins-extends-and-placeholders-differences-use-cases). So what we do is we make a parent class to encapsulate the concept, and then we just sling all of the CSS from our detail classes into it using class extension. This doesn&rsquo;t give us great code but it gives us <em>better</em> code, and we can always make it even better later.</p>
+
+<p>Generally this approach is pretty safe. Making a new parent class helps limit the area of effect of refactors. But sometimes an abstraction requires a few nested tags, and you can&rsquo;t fix that in the time you have. Or maybe you try this approach and something weird happens with the cascade and you go &ldquo;ew&rdquo; and back up a bit.</p>
+<pre><code class="highlight erb"><span class="cp">&lt;%=</span> <span class="n">tab_set</span> <span class="k">do</span> <span class="cp">%&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">tab</span><span class="p">(</span><span class="s1">'Cats'</span><span class="p">,</span> <span class="n">cats_path</span><span class="p">)</span> <span class="cp">%&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">tab</span><span class="p">(</span><span class="s1">'Dogs'</span><span class="p">,</span> <span class="n">dogs_path</span><span class="p">)</span> <span class="cp">%&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+</code></pre>
+
+<p>In that case what we want to do is build a nested helper. This is super pretty and fancy. And if your markup is simple it&rsquo;s maybe not that practical. Abstraction is useful when the thing you&rsquo;re abstracting is complex, but if the concrete thing is pretty simple it&rsquo;s ok to not want to keep that extra layer in your head. This is mostly a good mitigation technique if you&rsquo;ve got complicated markup.</p>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">LayoutHelper</span>
+  <span class="c1"># &lt;ul class='tabs tabs-left span7 big-text red'&gt;</span>
+  <span class="c1">#   [block contents]</span>
+  <span class="c1"># &lt;/ul&gt;</span>
+  <span class="k">def</span> <span class="nf">tab_set</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+    <span class="n">css_classes</span> <span class="o">=</span> <span class="sx">%w(tabs tabs-left span7 big-text red)</span>
+    <span class="n">content_tag</span><span class="p">(</span><span class="s1">'ul'</span><span class="p">,</span> <span class="ss">class: </span><span class="n">css_classes</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="s1">' '</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>Helper nesting is the simplest possible form of DSL magic. We build an outer tag, and say that its inside is going to be the content of a block. Then we yield control to the block.</p>
+
+<p>But what if you&rsquo;ve got something even more complex? Like,  when we look at these two screenshots these are both Cards. But they&rsquo;re *really different kinds of cards.</p>
+<pre><code class="highlight ruby"><span class="k">def</span> <span class="nf">card</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+  <span class="c1"># set options</span>
+
+  <span class="c1"># main code</span>
+  <span class="n">card_classes</span> <span class="o">=</span> <span class="n">size</span> <span class="p">?</span> <span class="s2">"card card--</span><span class="si">#{</span><span class="n">size</span><span class="si">}</span><span class="s2">"</span> <span class="p">:</span> <span class="s1">'card'</span>
+  <span class="n">content_tag</span><span class="p">(</span><span class="s1">'div'</span><span class="p">,</span> <span class="ss">class: </span><span class="s1">'card'</span><span class="p">)</span> <span class="k">do</span>
+    <span class="p">[</span>
+      <span class="n">card_header</span><span class="p">(</span><span class="n">header_text</span><span class="p">),</span>
+      <span class="p">(</span><span class="n">subheading</span><span class="p">.</span><span class="nf">present?</span> <span class="p">?</span> <span class="n">card_subheading</span><span class="p">(</span><span class="n">subheading</span><span class="p">)</span> <span class="p">:</span> <span class="kp">nil</span><span class="p">),</span>
+      <span class="n">image_tag</span><span class="p">(</span><span class="n">image_url</span><span class="p">),</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>So the way I would do this when I was earlier in my career was, like, the mega-helper approach. And I&rsquo;d be super proud of myself because I was making fewer lines of code. But identifying repetition is only the first part of making a useful abstraction. And code I can read in four months is more important than terse code.</p>
+<pre><code class="highlight erb"><span class="cp">&lt;%=</span> <span class="n">card</span><span class="p">(</span><span class="ss">size: </span><span class="s1">'large'</span><span class="p">)</span> <span class="k">do</span> <span class="cp">%&gt;</span>
+
+  <span class="cp">&lt;%=</span> <span class="n">card_header</span> <span class="s1">'My Awesome Cat Photo'</span> <span class="cp">%&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">card_image</span>  <span class="n">cat</span><span class="p">.</span><span class="nf">showcase_image_url</span> <span class="cp">%&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">card_badges</span> <span class="p">{</span>
+        <span class="ss">favorite: </span><span class="n">favorite_count</span>
+   <span class="p">}</span>
+  <span class="cp">%&gt;</span>
+
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+</code></pre>
+
+<p>And helper nesting can go a long way to making this suck less. But when I look at this I wonder how to make clear that card_header is only meaningful as a sub-method of card. I can hope that people look at this and get it, but if they guess wrong then the errors won&rsquo;t give them useful feedback. But I also don&rsquo;t want to build some huge, non-Rails-y thing that people need to learn the ins and outs of to extend my code. It&rsquo;s fun to snark about &ldquo;omakase&rdquo; but everyone knows Rails and no one knows the artisanal undocumented Betsy framework.</p>
+<pre><code class="highlight erb"><span class="cp">&lt;%=</span> <span class="n">card</span><span class="p">(</span><span class="ss">size: </span><span class="s1">'large'</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="o">|</span> <span class="cp">%&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">c</span><span class="p">.</span><span class="nf">header</span> <span class="s1">'My Awesome Cat Photo'</span> <span class="cp">%&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">c</span><span class="p">.</span><span class="nf">image</span>  <span class="n">cat</span><span class="p">.</span><span class="nf">showcase_image_url</span> <span class="cp">%&gt;</span>
+  <span class="cp">&lt;%=</span> <span class="n">c</span><span class="p">.</span><span class="nf">badges</span> <span class="p">{</span>
+        <span class="ss">favorite: </span><span class="n">favorite_count</span>
+  <span class="p">}</span>
+  <span class="cp">%&gt;</span>
+<span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span>
+</code></pre>
+
+<p>And so what I do is take form_for as an inspiration. I&rsquo;m not straying super far from The Rails Way, I&rsquo;m leaning on it so that everyone can take their understanding of Rails and lean on it to explain my code to themselves. If my code doesn&rsquo;t make my teammates&rsquo; lives better immediately, then I am not going to get buy-in for it, and I <em>shouldn&rsquo;t.</em></p>
+
+<p>And we don&rsquo;t need to change the pattern we&rsquo;re using all that much. We&rsquo;re still using the &ldquo;build a thing, then yield control&rdquo; pattern. But instead of building one parent tag, we&rsquo;re building a an object that knows how to render the entire component.</p>
+<pre><code class="highlight erb">def card(options = {}, <span class="err">&amp;</span>block)
+  CardBuilder.new(self, options).render(<span class="err">&amp;</span>block)
+end
+</code></pre>
+
+<p>Note that we&rsquo;re passing the view context &ndash; the class all helpers are included into, which we can grab using self &ndash; into the component builder. We&rsquo;re doing this so that we can use rails view helpers like content_tag in it. There are two schools of thought on using view contexts outside of helpers &ndash; this one, where you pass it in explicitly, and the more Draper-y approach where you use magic to pull the existing view context in or build your own. I don&rsquo;t trust magic.</p>
+
+<p>ComponentBuilder classes, the way I write them, usually have three major parts &ndash; initialization, a rendering shell, and a collection of sub-renderers.</p>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">CardBuilder</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="vi">@h</span> <span class="o">=</span> <span class="n">h</span>
+    <span class="vi">@size</span> <span class="o">=</span> <span class="n">options</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="ss">:size</span><span class="p">,</span> <span class="s1">'normal'</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>The only thing you <em>need</em> to do in the initialization step is grab the view context and stick it in an attribute. I&rsquo;m using &ldquo;h&rdquo; for that here, like in Draper &ndash; I usually hate single-letter variable names, but here that convention lets the view context recede into the background and lets us focus on the view output better. <code>content_tag</code> is the important method call, not <code>view_context</code> over and over.</p>
+
+<p>We can also set general options affecting the entire component. In general, this should only be used for top-level CSS classes, repeated text, or the like &ndash; we want the sub-renderers to do the heavy lifting. So, here we&rsquo;re setting the card size and that&rsquo;s it.</p>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">CardBuilder</span>
+  <span class="c1"># &lt;div class='card card--[size]'&gt;</span>
+  <span class="c1">#   [block contents]</span>
+  <span class="c1"># &lt;/div&gt;</span>
+  <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+    <span class="n">h</span><span class="p">.</span><span class="nf">content_tag</span><span class="p">(</span><span class="s1">'div'</span><span class="p">,</span> <span class="ss">class: </span><span class="n">css_classes</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>The next is a render shell, which builds out the outer framework of the component and passes off control to the sub-renderer block. Since this is a method with a content_tag, we also add a comment that gives you the HTML it generates.</p>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">CardBuilder</span>
+  <span class="c1"># &lt;h2 class='card__header'&gt;[text]&lt;/h2&gt;</span>
+  <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">h</span><span class="p">.</span><span class="nf">content_tag</span><span class="p">(</span><span class="s1">'h2'</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="ss">class: </span><span class="s1">'card__header'</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>Finally, a cluster of sub-renderer methods outputs the main body of the component.</p>
+
+<p>Here&rsquo;s what it looks like all knit together:</p>
+<pre><code class="highlight ruby"><span class="k">class</span> <span class="nc">CardBuilder</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="vi">@h</span> <span class="o">=</span> <span class="n">h</span>
+    <span class="vi">@size</span> <span class="o">=</span> <span class="n">options</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="ss">:size</span><span class="p">,</span> <span class="s1">'normal'</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="c1"># &lt;div class='card card--[size]'&gt;</span>
+  <span class="c1">#   [block contents]</span>
+  <span class="c1"># &lt;/div&gt;</span>
+  <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+    <span class="n">h</span><span class="p">.</span><span class="nf">content_tag</span><span class="p">(</span><span class="s1">'div'</span><span class="p">,</span> <span class="ss">class: </span><span class="n">css_classes</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="c1"># &lt;h2 class='card__header'&gt;[text]&lt;/h2&gt;</span>
+  <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">h</span><span class="p">.</span><span class="nf">content_tag</span><span class="p">(</span><span class="s1">'h2'</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="ss">class: </span><span class="s1">'card__header'</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>When you&rsquo;re writing these, do yourself a favor and use Nokogiri. Please do not bind your tests to exact text output, or regular expression matchers. That will make you very sad.</p>
+
+<h3>step 3: document</h3>
+
+<p>Once you&rsquo;ve finished codifying a view pattern, the next and final step is documenting it.</p>
+
+<p>The code comments we&rsquo;ve been sprinkling through this talk are a good first start. The first step of documentation is always &ldquo;realizing that your code is not as self-documenting as you want it to be.&rdquo;</p>
+<pre><code class="highlight ruby"><span class="c1"># ## Generated Markup</span>
+<span class="c1"># :include: ./app/views/components/_card.html.erb</span>
+<span class="k">class</span> <span class="nc">CardBuilder</span>
+
+<span class="k">end</span>
+</code></pre>
+
+<p>Fun trick: Use RDoc&rsquo;s :include: helper to inline partials. This provides useful, auto-updating documentation in the generated RDoc.</p>
+
+<p>And again, this is a great start.</p>
+
+<p>But only your developers are ever gonna look at your RDoc. So, this isn&rsquo;t as good as a communication tool as something like the 18F style guide. But something like that isn&rsquo;t <em>too</em> much harder to build.</p>
+
+<p>Now this is Style Documentation for the Resource-Constrained, not Style Documentation in Happy Unicorn Fairy Land, we need to ruthlessly prioritize what we&rsquo;re going to include on the first pass. The great news is is that we don&rsquo;t need to include that much to be useful. There are two common real-world use cases for this document, and we just need to make something that encompasses both.</p>
+
+<p>They are:</p>
+
+<ol>
+<li>developer is given wireframe, skims styleguide for plausible-looking element, and copypastes implementation into view file.</li>
+<li>Developer and designer, in conversation, occasionally point at styleguide elements to clarify their meaning</li>
+</ol>
+
+<p>The only two elements that both of those examples use are pictures of components and example code for those components. As long as you&rsquo;ve got these, you&rsquo;ve created a useful document.</p>
+
+<p>The two best tools I know of for actually making a stylegude are Hologram and KSS. Hologram is a Ruby gem; KSS has a few different implementations, and the node one is the best. (It has a few crucial features the others don&rsquo;t.) if you&rsquo;re doing a normal Rails app, pick Hologram. If you&rsquo;re doing a lot of your templating client-side, in Javascript, pick KSS.</p>
+
+<p>In general, you want your styleguide generator to be implemented in the same language as your views &ndash; this gets important later. So I&rsquo;m going to be using Hologram in all my code examples, because this is RailsConf.</p>
+<pre><code class="highlight scss"><span class="err">/*</span><span class="na">doc</span><span class="err">
+```</span><span class="na">html_example</span><span class="err">
+&lt;</span><span class="na">div</span><span class="err"> </span><span class="na">class</span><span class="err">='</span><span class="na">card</span><span class="err">'&gt;
+  &lt;</span><span class="na">h2</span><span class="err"> </span><span class="na">class</span><span class="err">='</span><span class="na">card__title</span><span class="err">'&gt;
+    </span><span class="na">Lorem</span><span class="err"> </span><span class="na">Ipsum</span><span class="err"> </span><span class="na">Dolor</span><span class="err"> </span><span class="na">Sit</span><span class="err"> </span><span class="na">Amet</span><span class="err">
+  &lt;/</span><span class="na">h2</span><span class="err">&gt;
+  &lt;</span><span class="na">img</span><span class="err"> </span><span class="nl">src</span><span class="err">="</span><span class="na">http</span><span class="p">:</span><span class="o">//</span><span class="n">placekitten</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="m">210</span><span class="o">/</span><span class="m">100</span><span class="s2">" /&gt;</span><span class="err">
+</span><span class="s2">  More text goes here!</span><span class="err">
+</span><span class="s2">&lt;/div&gt;</span><span class="err">
+</span></code></pre>
+
+<p>*/</p>
+
+<p>.card {
+  /* css */
+}
+&ldquo;`</p>
+
+<p>A good styleguide generator is going to work a little like RDoc. you put special documentation comments in your CSS files, and the processor turns them into docs. Putting your docs in your CSS, or someplace else central, is a great little nudge to your teammates that keeps documentation from dying. - It&rsquo;s easy to forget or deprioritize documentation that lives in <code>doc/random/stuff.md</code>. It&rsquo;s harder when it&rsquo;s right there above the code you&rsquo;re working on yelling &quot;fix me! Update me! Feel guilty if you don&rsquo;t!&rdquo;</p>
+
+<p>A good styleguide generator is also going to give special status to your code examples. Both KSS-node and Hologram render your code examples <em>as HTML</em> as well as as code examples, which lets us fill both the needs of our styleguide MVP automatically.</p>
+
+<p>And we could stop here but we can get <em>even better</em>.</p>
+
+<p>You know how we built all those cool little view helpers?</p>
+
+<p>If hologram processors are just executing Ruby, then we put our helpers in those example! This takes a bit more work to set up, and it&rsquo;s finicky and rails version dependent. But it&rsquo;s SUPER MAGICAL so I really recommend that you do it. Because then if your markup changes within the helper propogates automatically to your documentation and you don&rsquo;t need to worry as much about guilt-tripping your teammates.</p>
+
+<p>Add this file to your Hologram renderer directory:</p>
+<pre><code class="highlight ruby"><span class="kp">include</span> <span class="no">ActionDispatch</span><span class="o">::</span><span class="no">Routing</span><span class="o">::</span><span class="no">UrlFor</span>
+<span class="kp">include</span> <span class="no">Rails</span><span class="p">.</span><span class="nf">application</span><span class="p">.</span><span class="nf">routes</span><span class="p">.</span><span class="nf">url_helpers</span>
+
+<span class="c1"># manually include your view helpers here</span>
+
+<span class="k">module</span> <span class="nn">ActionView</span>
+  <span class="k">class</span> <span class="nc">Base</span>
+    <span class="k">def</span> <span class="nf">protect_against_forgery?</span><span class="p">;</span> <span class="kp">false</span><span class="p">;</span> <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># this isn't the Official Hologram Way but the Official Hologram Way is a weird DSL</span>
+<span class="c1"># that doesn't let us do the things around rendering helper output that we need to do</span>
+<span class="k">class</span> <span class="nc">HelperRenderer</span> <span class="o">&lt;</span> <span class="no">Hologram</span><span class="o">::</span><span class="no">CodeExampleRenderer</span><span class="o">::</span><span class="no">Example</span>
+  <span class="k">def</span> <span class="nf">lexer</span>
+    <span class="vi">@_lexer</span> <span class="o">||=</span> <span class="no">Rouge</span><span class="o">::</span><span class="no">Lexer</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="s1">'erb'</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">code_example_as_html</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="no">ActionView</span><span class="o">::</span><span class="no">Base</span><span class="p">.</span><span class="nf">new</span>
+    <span class="n">h</span><span class="p">.</span><span class="nf">assign_controller</span><span class="p">(</span><span class="no">ApplicationController</span><span class="p">.</span><span class="nf">new</span><span class="p">)</span>
+    <span class="n">h</span><span class="p">.</span><span class="nf">view_paths</span> <span class="o">&lt;&lt;</span> <span class="s2">"</span><span class="si">#{</span><span class="no">Rails</span><span class="p">.</span><span class="nf">root</span><span class="si">}</span><span class="s2">/app/views"</span>
+    <span class="n">h</span><span class="p">.</span><span class="nf">render</span><span class="p">(</span><span class="ss">inline: </span><span class="n">code</span><span class="p">)</span>
+  <span class="k">end</span>
+
+<span class="k">end</span>
+
+<span class="no">Hologram</span><span class="o">::</span><span class="no">CodeExampleRenderer</span><span class="p">.</span><span class="nf">register</span><span class="p">(</span><span class="s1">'helper'</span><span class="p">,</span>
+  <span class="ss">example_class:    </span><span class="no">HelperRenderer</span><span class="p">,</span>
+  <span class="ss">example_template: </span><span class="no">Hologram</span><span class="o">::</span><span class="no">CodeExampleRenderer</span><span class="o">::</span><span class="no">Template</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'helper_template'</span><span class="p">).</span><span class="nf">template</span>
+<span class="p">)</span>
+</code></pre>
+
+<p>I know it&rsquo;s pretty rough. But, eh, this is Style Docs For The Resource Constrained. You&rsquo;ll also need to build out the helper template. Here&rsquo;s mine:</p>
+<pre><code class="highlight html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"codeExample"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"exampleOutput"</span><span class="nt">&gt;</span>
+    <span class="err">&lt;</span>%= code_example_as_html %&gt;
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"codeBlock"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;pre&gt;</span><span class="err">&lt;</span>%= code_example %&gt;<span class="nt">&lt;/pre&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"codeBlock"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;pre&gt;</span><span class="err">&lt;</span>%= CGI.escapeHTML(code_example_as_html) %&gt;<span class="nt">&lt;/pre&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+
+<p>Note that the template both outputs the HTML that the helpers generate and the helpers themselves. This is, again, really important for helping orient designers &ndash; and it helps them prototype using styleguide primitives, even if they&rsquo;re not necessarily that comfortable with code. And the only thing that is made of more perfect magical joy than your designer handing you a prototype that you just need to wire up is you being able to easily pair on any kind of revisions that need to be made. You can work in this really fast, happy, UX-oriented way. That&rsquo;s just fun. And if you&rsquo;re doing that, it doesn&rsquo;t matter if your styleguide is this messy, ever-changing working document. Honestly that helps. It makes it accessible, and it makes changing it accessible when you figure out improvements.</p>
+
+<p>If you take one and only one thing from this talk, it is that this is the goal, and you can achieve it.</p>
+
+<p>The one core truism of agile is &ldquo;if it works for your team, roll with it. It&rsquo;s important to understand the building blocks of your UI, to use abstraction to effectively manage those building blocks, and to communicate constantly to make sure everyone on a team maintains the same understanding of these building blocks. Whatever methods you use, you can get there and you deserve to get there. Good luck.</p>
+
+<p>Many thanks to Coraline Ada Emkhe, Chris Hoffman, and the people of Arlington Ruby, Zeal, and ActBlue for their invaluable feedback in developing this talk.</p>
+
+          </div>
+
+          <footer>
+            <p>&copy; 2016 Betsy Haibel
+            </p>
+          </footer>
+<script src="//static.getclicky.com/js" type="text/javascript"></script>
+<script type="text/javascript">try{ clicky.init(100750202); }catch(e){}</script>
+    </body>
+</html>
