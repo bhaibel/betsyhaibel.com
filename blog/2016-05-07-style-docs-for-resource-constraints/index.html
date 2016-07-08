@@ -389,7 +389,7 @@ end
 
 <p>In general, you want your styleguide generator to be implemented in the same language as your views &ndash; this gets important later. So I&rsquo;m going to be using Hologram in all my code examples, because this is RailsConf.</p>
 <pre><code class="highlight scss"><span class="err">/*</span><span class="na">doc</span><span class="err">
-```</span><span class="na">html_example</span><span class="err">
+``````</span><span class="na">html_example</span><span class="err">
 &lt;</span><span class="na">div</span><span class="err"> </span><span class="na">class</span><span class="err">='</span><span class="na">card</span><span class="err">'&gt;
   &lt;</span><span class="na">h2</span><span class="err"> </span><span class="na">class</span><span class="err">='</span><span class="na">card__title</span><span class="err">'&gt;
     </span><span class="na">Lorem</span><span class="err"> </span><span class="na">Ipsum</span><span class="err"> </span><span class="na">Dolor</span><span class="err"> </span><span class="na">Sit</span><span class="err"> </span><span class="na">Amet</span><span class="err">
@@ -451,18 +451,18 @@ end
 </code></pre>
 
 <p>I know it&rsquo;s pretty rough. But, eh, this is Style Docs For The Resource Constrained. You&rsquo;ll also need to build out the helper template. Here&rsquo;s mine:</p>
-<pre><code class="highlight html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"codeExample"</span><span class="nt">&gt;</span>
+<pre><code class="highlight erb"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"codeExample"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"exampleOutput"</span><span class="nt">&gt;</span>
-    <span class="err">&lt;</span>%= code_example_as_html %&gt;
+    <span class="cp">&lt;%=</span> <span class="n">code_example_as_html</span> <span class="cp">%&gt;</span>
   <span class="nt">&lt;/div&gt;</span>
   <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"codeBlock"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;pre&gt;</span><span class="err">&lt;</span>%= code_example %&gt;<span class="nt">&lt;/pre&gt;</span>
+      <span class="nt">&lt;pre&gt;</span><span class="cp">&lt;%=</span> <span class="n">code_example</span> <span class="cp">%&gt;</span><span class="nt">&lt;/pre&gt;</span>
     <span class="nt">&lt;/div&gt;</span>
   <span class="nt">&lt;/div&gt;</span>
   <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"codeBlock"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"highlight"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;pre&gt;</span><span class="err">&lt;</span>%= CGI.escapeHTML(code_example_as_html) %&gt;<span class="nt">&lt;/pre&gt;</span>
+      <span class="nt">&lt;pre&gt;</span><span class="cp">&lt;%=</span> <span class="no">CGI</span><span class="p">.</span><span class="nf">escapeHTML</span><span class="p">(</span><span class="n">code_example_as_html</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="nt">&lt;/pre&gt;</span>
     <span class="nt">&lt;/div&gt;</span>
   <span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/div&gt;</span>
