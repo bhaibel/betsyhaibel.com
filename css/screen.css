@@ -53,12 +53,8 @@ nav {
   margin: 0; }
 /* line 39, /Users/elhaibel/code/open/betsyhaibel.com/source/css/screen.scss */
 .blurb p {
-  width: 74.57627%;
-  float: right;
-  margin-right: 0;
-  *margin-left: -1em;
-  display: inline;
-  margin-left: 25.42373%; }
+  text-align: center;
+  font-size: 1.25em; }
 /* line 43, /Users/elhaibel/code/open/betsyhaibel.com/source/css/screen.scss */
 .blurb ul {
   width: 57.62712%;
